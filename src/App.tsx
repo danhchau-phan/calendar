@@ -10,7 +10,7 @@ function App() {
 	})
 	return (
 		<>
-			<div className="mx-8 text-gray-600">
+			<div className="mx-8 h-screen text-gray-600 flex flex-col">
 				<Navigation setMonthYear={setMonthYear} month={monthYear.month} year={monthYear.year} />
 				<Month {...monthYear} />
 			</div>
