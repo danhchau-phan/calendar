@@ -1,0 +1,11 @@
+.day {
+  @apply font-semibold border border-t-0 py-1;
+}
+
+.day-number {
+  @apply items-center text-center;
+}
+
+.disabled-day {
+  @apply text-slate-400;
+}

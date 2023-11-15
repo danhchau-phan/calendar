@@ -5,6 +5,7 @@ import { daysInMonth, daysOfNextMonthWithinTheWeek, daysOfLastMonthWithinTheWeek
 
 import "./Month.scss"
 import EventPopUp from "./EventPopUp";
+import Day from "./Day";
 
 export default function Month({month, year}: MonthYear) {
   const [addEvent, setAddEvent] = useState(true)
@@ -14,29 +15,12 @@ export default function Month({month, year}: MonthYear) {
       <div className="grid grid-cols-7 text-center text-sm">
         {WEEKDAYS.map((day) => <div className="border-x h-fit uppercase">{day}</div>)}
       </div>
-      <div className="grid grid-cols-7 text-center flex-grow leading-7">
-        {daysOfLastMonthWithinTheWeek(month, year).map((day) => <div className="disabled-tile day">{day}</div>)}
+      <div className="grid grid-cols-7 flex-grow leading-7">
+        {daysOfLastMonthWithinTheWeek(month, year).map((day) => <Day day={day} month={month} year={year} />)}
         {Array.from({length: daysInMonth(month, year)}, (val, id) => id+1).map(
-          (day) => <div draggable
-            onDragStart={(e) => {
-              e.preventDefault()
-            }}
-           onMouseUp={(e) => {
-            e.preventDefault()
-            const {day: d, month: m, year: y} = JSON.parse(e.currentTarget.getAttribute("data-value") ?? "")
-            console.log(d,m,y)
-          }} className="day" data-value={JSON.stringify({day: day, month: month, year: year})}>
-            {isToday(day,month,year) ? 
-              <div className="inline-block items-center">
-                <div className="text-white rounded-full bg-blue-800 w-7">
-                  {day}
-                </div>
-              </div> : 
-              <div>{day}</div>
-            }
-            </div>
+          (day) => <Day isCurrentMonth={true} day={day} month={month} year={year} />
         )}
-        {daysOfNextMonthWithinTheWeek(month, year).map((day) => <div className="disabled-tile day">{day}</div>)}
+        {daysOfNextMonthWithinTheWeek(month, year).map((day) => <Day day={day} month={month} year={year} />)}
       </div>
       {addEvent && <EventPopUp setClosePopUp={setAddEvent}/>}
     </div>
