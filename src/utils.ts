@@ -22,3 +22,9 @@ export function getMonthName(month: number, year: number) {
 		month: "long",
 	});
 }
+
+export function isToday(day: number, month: number, year: number) {
+	const date = new Date(year, month - 1, day).toDateString();
+	const today = new Date().toDateString();
+	return date === today;
+}

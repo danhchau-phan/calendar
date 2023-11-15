@@ -1,0 +1,13 @@
+.button {
+  @apply px-2 py-4 focus:text-blue-500 focus:bg-blue-100 font-semibold rounded-md;
+}
+
+.text-area {
+  @apply pb-1 text-3xl outline-none border-b border-gray-900;
+
+  &:focus {
+    @apply text-gray-900 border-b-2 border-blue-500;
+    transition: border-width 0.5s ease-out;
+    -webkit-transition: border-width 0.5s ease-out;
+  }
+}

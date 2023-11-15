@@ -1,7 +1,7 @@
 .disabled-tile {
-  @apply bg-slate-400;
+  @apply text-slate-400;
 }
 
-.weekday-tile {
-  @apply font-semibold;
+.day {
+  @apply font-semibold border border-t-0 py-1;
 }
