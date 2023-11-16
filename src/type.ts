@@ -3,12 +3,6 @@ export type MonthYear = {
 	year: number;
 };
 
-export type Event = {
-	startDayId: number;
-	length: number;
-	title: string;
-};
-
 export type CalendarState = {
 	eventFinalized: boolean;
 	eventLength: number;
@@ -20,4 +14,11 @@ export type CalendarState = {
 	setEventLength: Function;
 	setDisplayedMonthYear: Function;
 	setEventStartDayId: Function;
+};
+
+export type CalendarEventProps = {
+	eventLength: number;
+	dayId: number;
+	eventStartDayId: number | null;
+	title?: string;
 };

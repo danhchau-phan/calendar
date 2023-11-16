@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react"
 import clsx from "clsx";
 import { getShortMonthName, isToday } from "./utils";
-import "./Day.scss"
+import CalendarEvent from "./Event";
 import { CalendarState } from "./type";
 import { useStore } from "./store";
+
+import "./Day.scss"
 
 interface DayProps {
   isCurrentMonth?: boolean
@@ -64,11 +66,7 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year}: D
       </div>
     </div>
     <div className="py-2 pointer-events-none">
-      {eventLength >= 0 ?
-      dayId === eventStartDayId && <div className="bg-red-300 h-1/3 rounded-md sticky pointer-events-none"
-      style={{ width: `calc(${100 * (eventLength+1)}% - 9px)`}}>placeholder</div> :
-      dayId === eventStartDayId as number + eventLength && <div className="bg-red-300 h-1/3 rounded-md sticky pointer-events-none"
-      style={{ width: `calc(${100 * (-eventLength+1)}% - 9px)`}}>placeholder</div>}
+      <CalendarEvent eventLength={eventLength} eventStartDayId={eventStartDayId} dayId={dayId}/>
     </div>
   </div>)
 }
