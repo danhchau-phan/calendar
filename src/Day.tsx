@@ -19,20 +19,20 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year}: D
   const eventFinalized = useStore((state) => state.eventFinalized)
   const eventLength = useStore((state) => state.eventLength)
   const setEventLength = useStore((state) => state.setEventLength)
+  const eventStartDayId = useStore((state) => state.eventStartDayId)
+  const setEventStartDayId = useStore((state) => state.setEventStartDayId)
   const [finalDaySelectedInEvent, setFinalDaySelectedInEvent] = useState<boolean | null>(null);
-  const [eventStartsThisDay, setEventStartsThisDay] = useState(false)
 
   useEffect(() => {
-    finalDaySelectedInEvent !== null && (finalDaySelectedInEvent ? setEventLength(eventLength+1) : setEventLength(eventLength-1));
+    finalDaySelectedInEvent !== null && eventStartDayId !== null && finalDaySelectedInEvent &&
+        setEventLength(dayId - eventStartDayId)
   }, [finalDaySelectedInEvent, setEventLength]);
 
   useEffect(() => {
     if (eventFinalized) {
-      setEventLength(0);
       setFinalDaySelectedInEvent(null);
-      setEventStartsThisDay(false);
     } 
-  }, [eventFinalized, setEventLength])
+  }, [eventFinalized])
 
   return (
   <div 
@@ -40,7 +40,7 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year}: D
     onDragStart={(e) => {
       e.preventDefault();
       addEvent();
-      setEventStartsThisDay(true);
+      setEventStartDayId(dayId);
       setFinalDaySelectedInEvent(true);
     }}
     onMouseOver={(e) => {
@@ -54,6 +54,8 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year}: D
     onMouseUp={(e) => {
       e.preventDefault()
       finalizeEvent();
+      // TODO save event into store
+      setEventLength(0);
     }}
     className={clsx("day", !isCurrentMonth && "disabled-day")}>
     <div className="day-number">
@@ -62,8 +64,11 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year}: D
       </div>
     </div>
     <div className="py-2 pointer-events-none">
-      {eventStartsThisDay && <div className="bg-red-300 h-1/3 rounded-md sticky"
-      style={{ width: `calc(${100 * eventLength}% - 9px)`}}>placeholder</div>}
+      {eventLength >= 0 ?
+      dayId === eventStartDayId && <div className="bg-red-300 h-1/3 rounded-md sticky pointer-events-none"
+      style={{ width: `calc(${100 * (eventLength+1)}% - 9px)`}}>placeholder</div> :
+      dayId === eventStartDayId as number + eventLength && <div className="bg-red-300 h-1/3 rounded-md sticky pointer-events-none"
+      style={{ width: `calc(${100 * (-eventLength+1)}% - 9px)`}}>placeholder</div>}
     </div>
   </div>)
 }
