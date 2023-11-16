@@ -28,3 +28,13 @@ export function isToday(day: number, month: number, year: number) {
 	const today = new Date().toDateString();
 	return date === today;
 }
+
+export function getNextMonthYear(month: number, year: number) {
+	const nextMonth = new Date(year, month);
+	return { month: nextMonth.getMonth(), year: nextMonth.getFullYear() };
+}
+
+export function getLastMonthYear(month: number, year: number) {
+	const lastMonth = new Date(year, month - 2);
+	return { month: lastMonth.getMonth(), year: lastMonth.getFullYear() };
+}
