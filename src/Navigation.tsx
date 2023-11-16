@@ -1,6 +1,6 @@
 import React from "react";
 import { MonthYear } from "./type";
-import { getMonthName } from "./utils";
+import { getLongMonthName } from "./utils";
 import { NavArrowRight, NavArrowLeft } from 'iconoir-react';
 
 interface NavigationProps extends MonthYear {
@@ -13,7 +13,7 @@ export function Navigation({month, year, setMonthYear}: NavigationProps) {
           <NavArrowLeft height={36} width={36} className="ml-4 p-2" onClick={() => setMonthYear({month: month-1, year})} />
           <NavArrowRight height={36} width={36} className="p-2" onClick={() => setMonthYear({month: month+1, year})} />
           <div className="ml-4 flex-grow text-2xl font-bold">
-            {getMonthName(month, year)} {year}
+            {getLongMonthName(month)} {year}
           </div>
         </div>
 }

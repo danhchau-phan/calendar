@@ -1,33 +1,38 @@
 import React, { useEffect, useState } from "react"
 import clsx from "clsx";
-import { isToday } from "./utils";
+import { getShortMonthName, isToday } from "./utils";
 import "./Day.scss"
 import { CalendarState } from "./type";
 import { useStore } from "./store";
 
 interface DayProps {
   isCurrentMonth?: boolean
+  dayId: number
   day: number
   month: number
   year: number
 }
 
-export default function Day({isCurrentMonth = false, day, month, year}: DayProps) {
+export default function Day({isCurrentMonth = false, dayId, day, month, year}: DayProps) {
   const addEvent = useStore((state: CalendarState) => state.startAddingEvent)
   const finalizeEvent = useStore((state: CalendarState) => state.finalizeEvent)
-  const increaseEventLength = useStore((state: CalendarState) => state.increaseEventLength)
-  const decreaseEventLength = useStore((state: CalendarState) => state.decreaseEventLength)
   const eventFinalized = useStore((state) => state.eventFinalized)
-
-  const [daySelectedInEvent, setDaySelectedInEvent] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    daySelectedInEvent !== null && daySelectedInEvent ? increaseEventLength() : decreaseEventLength();
-  }, [daySelectedInEvent, increaseEventLength, decreaseEventLength]);
+  const eventLength = useStore((state) => state.eventLength)
+  const setEventLength = useStore((state) => state.setEventLength)
+  const [finalDaySelectedInEvent, setFinalDaySelectedInEvent] = useState<boolean | null>(null);
+  const [eventStartsThisDay, setEventStartsThisDay] = useState(false)
 
   useEffect(() => {
-    eventFinalized && setDaySelectedInEvent(null)
-  }, [eventFinalized])
+    finalDaySelectedInEvent !== null && (finalDaySelectedInEvent ? setEventLength(eventLength+1) : setEventLength(eventLength-1));
+  }, [finalDaySelectedInEvent, setEventLength]);
+
+  useEffect(() => {
+    if (eventFinalized) {
+      setEventLength(0);
+      setFinalDaySelectedInEvent(null);
+      setEventStartsThisDay(false);
+    } 
+  }, [eventFinalized, setEventLength])
 
   return (
   <div 
@@ -35,26 +40,30 @@ export default function Day({isCurrentMonth = false, day, month, year}: DayProps
     onDragStart={(e) => {
       e.preventDefault();
       addEvent();
+      setEventStartsThisDay(true);
+      setFinalDaySelectedInEvent(true);
     }}
-    onDragEnter={(e) => {
+    onMouseOver={(e) => {
       e.preventDefault();
-      setDaySelectedInEvent((selected) => selected === null ? true : !selected);
+      !eventFinalized && setFinalDaySelectedInEvent((selected) => (!selected));
+    }}
+    onMouseLeave={(e) => {
+      e.preventDefault();
+      !eventFinalized && setFinalDaySelectedInEvent((selected) => (!selected));
     }}
     onMouseUp={(e) => {
       e.preventDefault()
       finalizeEvent();
-      // const {day: d, month: m, year: y} = JSON.parse(e.currentTarget.getAttribute("data-value") ?? "")
-      // console.log(d,m,y)
     }}
-    className={clsx("day", !isCurrentMonth && "disabled-tile")}
-    data-value={JSON.stringify({day: day, month: month, year: year})}>
+    className={clsx("day", !isCurrentMonth && "disabled-tile")}>
     <div className="day-number">
       <div className={clsx("inline-block",isToday(day,month,year) && "text-white rounded-full bg-blue-800 w-7")}>
-        {day}
+        {day === 1 ? <div>{day}&nbsp;{getShortMonthName(month)}</div> : day} 
       </div>
     </div>
-    <div>
-      {day === 17 && <button className="bg-red-300 w-[200%] h-5 rounded-md sticky">placeholder</button>}
+    <div className="py-2">
+      {eventStartsThisDay && <div className="bg-red-300 h-1/3 rounded-md sticky"
+      style={{ width: `calc(${100 * eventLength}% - 9px)`}}>placeholder</div>}
     </div>
   </div>)
 }

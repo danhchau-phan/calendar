@@ -3,13 +3,18 @@ export type MonthYear = {
 	year: number;
 };
 
+export type Event = {
+	startDayId: number;
+	length: number;
+	title: string;
+};
+
 export type CalendarState = {
 	eventFinalized: boolean;
 	eventLength: number;
-	increaseEventLength: Function;
-	decreaseEventLength: Function;
+	displayedMonthYear: MonthYear;
 	startAddingEvent: Function;
 	finalizeEvent: Function;
-	displayedMonthYear: MonthYear;
+	setEventLength: Function;
 	setDisplayedMonthYear: Function;
 };

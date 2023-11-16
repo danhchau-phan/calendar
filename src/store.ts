@@ -6,13 +6,9 @@ export const useStore = create<CalendarState>((set) => ({
 	eventLength: 0,
 	startAddingEvent: () => set({ eventFinalized: false }),
 	finalizeEvent: () => set({ eventFinalized: true }),
-	increaseEventLength: () =>
+	setEventLength: (length: number) =>
 		set((state: CalendarState) => ({
-			eventLength: state.eventLength + 1,
-		})),
-	decreaseEventLength: () =>
-		set((state: CalendarState) => ({
-			eventLength: state.eventLength - 1,
+			eventLength: length,
 		})),
 	displayedMonthYear: {
 		month: new Date().getMonth(),
