@@ -14,6 +14,9 @@ export const useStore = create<CalendarState>((set) => ({
 		month: new Date().getMonth(),
 		year: new Date().getFullYear(),
 	},
+	setEventStartDayId: (dayId: number) => set({ eventStartDayId: dayId }),
+	eventStartDayId: null,
+	events: [],
 	setDisplayedMonthYear: ({ month, year }: MonthYear) => {
 		return month > 12
 			? set((state: CalendarState) => ({ displayedMonthYear: { month: 1, year: year + 1 } }))

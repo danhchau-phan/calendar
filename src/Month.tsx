@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import clsx from "clsx";
 import { WEEKDAYS } from "./constants";
 import { MonthYear } from "./type";
 import { daysInMonth, daysOfNextMonthWithinTheLastWeek, daysOfLastMonthWithinTheFirstWeek, getLastMonthYear, getNextMonthYear } from "./utils";
@@ -16,12 +17,16 @@ export default function Month({month, year}: MonthYear) {
   const _daysInMonth: number = daysInMonth(month, year)
   const daysOfNextMonth = daysOfNextMonthWithinTheLastWeek(month, year)
 
+  const totalDaysDisplayed = daysOfLastMonth.length + _daysInMonth + daysOfNextMonth.length
   return (
-    <div className="flex-grow flex flex-col">
+    <div className="flex-grow flex flex-col mb-2 border-l">
       <div className="grid grid-cols-7 text-center text-sm">
-        {WEEKDAYS.map((day) => <div className="border-x h-fit uppercase">{day}</div>)}
+        {WEEKDAYS.map((day) => <div className="border-r h-fit uppercase">{day}</div>)}
       </div>
-      <div className="grid grid-cols-7 flex-grow leading-7">
+      <div className={
+        clsx("grid grid-cols-7 flex-grow leading-7",
+        totalDaysDisplayed === 28 ? 
+          "grid-rows-4" : totalDaysDisplayed === 35 ? "grid-rows-5" : "grid-rows-6")}>
         {daysOfLastMonth.map((day, id) => <Day dayId={id} day={day} month={lastMonthYear.month} year={lastMonthYear.year} />)}
         {Array.from({length: _daysInMonth}, (val, id) => id+1).map(
           (day, id) => <Day isCurrentMonth={true} dayId={id + daysOfLastMonth.length} day={day} month={month} year={year} />

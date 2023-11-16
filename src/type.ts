@@ -13,8 +13,11 @@ export type CalendarState = {
 	eventFinalized: boolean;
 	eventLength: number;
 	displayedMonthYear: MonthYear;
+	eventStartDayId: number | null;
+	events: Event[];
 	startAddingEvent: Function;
 	finalizeEvent: Function;
 	setEventLength: Function;
 	setDisplayedMonthYear: Function;
+	setEventStartDayId: Function;
 };

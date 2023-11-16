@@ -47,7 +47,7 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year}: D
       e.preventDefault();
       !eventFinalized && setFinalDaySelectedInEvent((selected) => (!selected));
     }}
-    onMouseLeave={(e) => {
+    onMouseOut={(e) => {
       e.preventDefault();
       !eventFinalized && setFinalDaySelectedInEvent((selected) => (!selected));
     }}
@@ -55,13 +55,13 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year}: D
       e.preventDefault()
       finalizeEvent();
     }}
-    className={clsx("day", !isCurrentMonth && "disabled-tile")}>
+    className={clsx("day", !isCurrentMonth && "disabled-day")}>
     <div className="day-number">
       <div className={clsx("inline-block",isToday(day,month,year) && "text-white rounded-full bg-blue-800 w-7")}>
-        {day === 1 ? <div>{day}&nbsp;{getShortMonthName(month)}</div> : day} 
+        {day === 1 ? <div>{day}&nbsp;{getShortMonthName(month)}</div> : day}
       </div>
     </div>
-    <div className="py-2">
+    <div className="py-2 pointer-events-none">
       {eventStartsThisDay && <div className="bg-red-300 h-1/3 rounded-md sticky"
       style={{ width: `calc(${100 * eventLength}% - 9px)`}}>placeholder</div>}
     </div>
