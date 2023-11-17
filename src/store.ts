@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { CalendarState, MonthYear } from "./type";
+import { CalendarEvent, CalendarState, MonthYear } from "./type";
+import { compareCalendarEvents } from "./utils";
 
 export const useStore = create<CalendarState>((set) => ({
 	eventFinalized: true,
@@ -16,7 +17,7 @@ export const useStore = create<CalendarState>((set) => ({
 	},
 	setEventStartDayId: (dayId: number) => set({ eventStartDayId: dayId }),
 	eventStartDayId: null,
-	events: [],
+	savedEvents: {},
 	setDisplayedMonthYear: ({ month, year }: MonthYear) => {
 		return month > 12
 			? set((state: CalendarState) => ({ displayedMonthYear: { month: 1, year: year + 1 } }))
@@ -24,4 +25,45 @@ export const useStore = create<CalendarState>((set) => ({
 			? set((state: CalendarState) => ({ displayedMonthYear: { month: 12, year: year - 1 } }))
 			: set((state: CalendarState) => ({ displayedMonthYear: { month, year } }));
 	},
+	saveEvent: (
+		eventLength: number,
+		eventStartDayId: number,
+		day: number,
+		month: number,
+		year: number
+	) =>
+		set((state: CalendarState) => {
+			const event: CalendarEvent = {
+				eventId: crypto.randomUUID(),
+				eventLength,
+				eventStartDayId,
+				day: new Date(year, month - 1, day),
+			};
+			if (state.savedEvents[year] === undefined)
+				return { savedEvents: Object.assign(state.savedEvents, { year: { month: [event] } }) };
+			else if (state.savedEvents[year][month] === undefined)
+				return {
+					savedEvents: Object.assign(
+						state.savedEvents,
+						Object.assign(state.savedEvents[year], { month: [event] })
+					),
+				};
+			return {
+				savedEvents: Object.assign(
+					state.savedEvents,
+					Object.assign(state.savedEvents[year], {
+						month: [...state.savedEvents[year][month], event].sort(compareCalendarEvents),
+					})
+				),
+			};
+		}),
+	removeSavedEvent: (eventId: string, { month, year }: MonthYear) =>
+		set((state: CalendarState) => ({
+			savedEvents: Object.assign(
+				state.savedEvents,
+				Object.assign(state.savedEvents[year], {
+					month: state.savedEvents[year][month].filter((event) => event.eventId !== eventId),
+				})
+			),
+		})),
 }));

@@ -3,17 +3,26 @@ export type MonthYear = {
 	year: number;
 };
 
+export type CalendarEvent = {
+	eventId: string;
+	eventLength: number;
+	eventStartDayId: number;
+	day: Date;
+};
+
 export type CalendarState = {
 	eventFinalized: boolean;
 	eventLength: number;
 	displayedMonthYear: MonthYear;
 	eventStartDayId: number | null;
-	events: Event[];
+	savedEvents: Record<number, Record<number, CalendarEvent[]>>;
 	startAddingEvent: Function;
 	finalizeEvent: Function;
 	setEventLength: Function;
 	setDisplayedMonthYear: Function;
 	setEventStartDayId: Function;
+	saveEvent: Function;
+	removeSavedEvent: Function;
 };
 
 export type CalendarEventProps = {

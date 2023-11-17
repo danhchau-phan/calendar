@@ -23,6 +23,7 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year}: D
   const setEventLength = useStore((state) => state.setEventLength)
   const eventStartDayId = useStore((state) => state.eventStartDayId)
   const setEventStartDayId = useStore((state) => state.setEventStartDayId)
+  const saveEvent = useStore((state) => state.saveEvent)
   const [finalDaySelectedInEvent, setFinalDaySelectedInEvent] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -54,7 +55,14 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year}: D
       !eventFinalized && setFinalDaySelectedInEvent((selected) => (!selected));
     }}
     onMouseUp={(e) => {
-      e.preventDefault()
+      e.preventDefault();
+      saveEvent({
+        eventLength: eventLength,
+        eventStartDayId: eventStartDayId,
+        day,
+        month,
+        year
+      })
       finalizeEvent();
     }}
     className={clsx("day", !isCurrentMonth && "disabled-day")}>

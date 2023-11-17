@@ -1,3 +1,5 @@
+import { CalendarEvent } from "./type";
+
 export function daysInMonth(month: number, year: number) {
 	return new Date(year, month, 0).getDate();
 }
@@ -35,6 +37,10 @@ export function isToday(day: number, month: number, year: number) {
 	const date = new Date(year, month - 1, day).toDateString();
 	const today = new Date().toDateString();
 	return date === today;
+}
+
+export function compareCalendarEvents(event1: CalendarEvent, event2: CalendarEvent) {
+	return event1.day.getTime() - event2.day.getTime();
 }
 
 export function getNextMonthYear(month: number, year: number) {
