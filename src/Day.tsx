@@ -66,7 +66,7 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year}: D
       </div>
     </div>
     <div className="py-2 pointer-events-none">
-      <CalendarEvent eventLength={eventLength} eventStartDayId={eventStartDayId} dayId={dayId}/>
+      <CalendarEvent eventLength={eventLength} eventStartDayId={eventStartDayId ?? 0} dayId={dayId}/>
     </div>
   </div>)
 }

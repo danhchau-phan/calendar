@@ -19,6 +19,6 @@ export type CalendarState = {
 export type CalendarEventProps = {
 	eventLength: number;
 	dayId: number;
-	eventStartDayId: number | null;
+	eventStartDayId: number;
 	title?: string;
 };
