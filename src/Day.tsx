@@ -1,21 +1,14 @@
 import React, { useEffect, useState } from "react"
 import clsx from "clsx";
-import { getShortMonthName, isToday } from "./utils";
+import { addDays, getShortMonthName, isToday } from "./utils";
 import CalendarEvent from "./Event";
-import { CalendarState } from "./type";
+import { CalendarState, DayProps } from "./type";
 import { useStore } from "./store";
 
 import "./Day.scss"
 
-interface DayProps {
-  isCurrentMonth?: boolean
-  dayId: number
-  day: number
-  month: number
-  year: number
-}
 
-export default function Day({isCurrentMonth = false, dayId, day, month, year}: DayProps) {
+export default function Day({isCurrentMonth = false, dayId, day, month, year, events}: DayProps) {
   const addEvent = useStore((state: CalendarState) => state.startAddingEvent)
   const finalizeEvent = useStore((state: CalendarState) => state.finalizeEvent)
   const eventFinalized = useStore((state) => state.eventFinalized)
@@ -56,13 +49,24 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year}: D
     }}
     onMouseUp={(e) => {
       e.preventDefault();
-      saveEvent({
-        eventLength: eventLength,
-        eventStartDayId: eventStartDayId,
-        day,
-        month,
-        year
-      })
+      if (eventLength < 0 ) {
+        saveEvent( {
+          eventLength: -eventLength,
+          day,
+          month,
+          year,
+          title: "Temp title"
+        })
+      } else {
+        const {day: _day, month: _month, year: _year} = addDays(day, month, year, eventLength)
+        saveEvent({
+          eventLength: eventLength,
+          day: _day,
+          month: _month,
+          year: _year,
+          title: "Temp title"
+        })
+      }
       finalizeEvent();
     }}
     className={clsx("day", !isCurrentMonth && "disabled-day")}>
@@ -73,6 +77,7 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year}: D
     </div>
     <div className={clsx("flex-grow py-2", !eventFinalized && "pointer-events-none")}>
       <CalendarEvent eventLength={eventLength} eventStartDayId={eventStartDayId ?? 0} dayId={dayId}/>
+      {events.map((event) => <CalendarEvent eventLength={event.eventLength} eventStartDayId={dayId} dayId={dayId} title={event.title}/>)}
     </div>
   </div>)
 }

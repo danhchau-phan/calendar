@@ -1,12 +1,12 @@
 import { create } from "zustand";
-import { CalendarEvent, CalendarState, MonthYear } from "./type";
+import { CalendarEvent, CalendarState, MonthYear, SavedEventParams } from "./type";
 import { compareCalendarEvents } from "./utils";
 
 export const useStore = create<CalendarState>((set) => ({
 	eventFinalized: true,
 	eventLength: 0,
-	startAddingEvent: () => set({ eventFinalized: false }),
-	finalizeEvent: () => set({ eventFinalized: true }),
+	startAddingEvent: () => set({ eventFinalized: false, eventLength: 1 }),
+	finalizeEvent: () => set({ eventFinalized: true, eventLength: 0 }),
 	setEventLength: (length: number) =>
 		set((state: CalendarState) => ({
 			eventLength: length,
@@ -25,36 +25,28 @@ export const useStore = create<CalendarState>((set) => ({
 			? set((state: CalendarState) => ({ displayedMonthYear: { month: 12, year: year - 1 } }))
 			: set((state: CalendarState) => ({ displayedMonthYear: { month, year } }));
 	},
-	saveEvent: (
-		eventLength: number,
-		eventStartDayId: number,
-		day: number,
-		month: number,
-		year: number
-	) =>
+	saveEvent: ({ eventLength, day, month, year, title }: SavedEventParams) =>
 		set((state: CalendarState) => {
 			const event: CalendarEvent = {
 				eventId: crypto.randomUUID(),
 				eventLength,
-				eventStartDayId,
+				title,
 				day: new Date(year, month - 1, day),
 			};
 			if (state.savedEvents[year] === undefined)
-				return { savedEvents: Object.assign(state.savedEvents, { year: { month: [event] } }) };
+				return { savedEvents: Object.assign(state.savedEvents, { [year]: { [month]: [event] } }) };
 			else if (state.savedEvents[year][month] === undefined)
 				return {
-					savedEvents: Object.assign(
-						state.savedEvents,
-						Object.assign(state.savedEvents[year], { month: [event] })
-					),
+					savedEvents: Object.assign(state.savedEvents, {
+						[year]: Object.assign(state.savedEvents[year], { [month]: [event] }),
+					}),
 				};
 			return {
-				savedEvents: Object.assign(
-					state.savedEvents,
-					Object.assign(state.savedEvents[year], {
-						month: [...state.savedEvents[year][month], event].sort(compareCalendarEvents),
-					})
-				),
+				savedEvents: Object.assign(state.savedEvents, {
+					[year]: Object.assign(state.savedEvents[year], {
+						[month]: [...state.savedEvents[year][month], event].sort(compareCalendarEvents),
+					}),
+				}),
 			};
 		}),
 	removeSavedEvent: (eventId: string, { month, year }: MonthYear) =>
@@ -62,7 +54,7 @@ export const useStore = create<CalendarState>((set) => ({
 			savedEvents: Object.assign(
 				state.savedEvents,
 				Object.assign(state.savedEvents[year], {
-					month: state.savedEvents[year][month].filter((event) => event.eventId !== eventId),
+					[month]: state.savedEvents[year][month].filter((event) => event.eventId !== eventId),
 				})
 			),
 		})),

@@ -52,3 +52,9 @@ export function getLastMonthYear(month: number, year: number) {
 	const lastMonth = new Date(year, month - 2);
 	return { month: lastMonth.getMonth() + 1, year: lastMonth.getFullYear() };
 }
+
+export function addDays(day: number, month: number, year: number, increment: number) {
+	const date = new Date(year, month - 1, day);
+	date.setDate(date.getDate() - increment);
+	return { day: date.getDay(), month: date.getMonth() + 1, year: date.getFullYear() };
+}

@@ -6,8 +6,8 @@ export type MonthYear = {
 export type CalendarEvent = {
 	eventId: string;
 	eventLength: number;
-	eventStartDayId: number;
 	day: Date;
+	title: string;
 };
 
 export type CalendarState = {
@@ -30,4 +30,21 @@ export type CalendarEventProps = {
 	dayId: number;
 	eventStartDayId: number;
 	title?: string;
+};
+
+export type DayProps = {
+	isCurrentMonth?: boolean;
+	dayId: number;
+	day: number;
+	month: number;
+	year: number;
+	events: CalendarEvent[];
+};
+
+export type SavedEventParams = {
+	eventLength: number;
+	day: number;
+	month: number;
+	year: number;
+	title: string;
 };
