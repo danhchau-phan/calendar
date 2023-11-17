@@ -56,8 +56,6 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year}: D
     onMouseUp={(e) => {
       e.preventDefault()
       finalizeEvent();
-      // TODO save event into store
-      setEventLength(0);
     }}
     className={clsx("day", !isCurrentMonth && "disabled-day")}>
     <div className="day-number">
@@ -65,7 +63,7 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year}: D
         {day === 1 ? <div>{day}&nbsp;{getShortMonthName(month)}</div> : day}
       </div>
     </div>
-    <div className="py-2 pointer-events-none">
+    <div className={clsx("flex-grow py-2", !eventFinalized && "pointer-events-none")}>
       <CalendarEvent eventLength={eventLength} eventStartDayId={eventStartDayId ?? 0} dayId={dayId}/>
     </div>
   </div>)

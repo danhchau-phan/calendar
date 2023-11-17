@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import clsx from "clsx";
-import { WEEKDAYS } from "./constants";
+import { NUMBER_OF_DAYS_IN_FIVE_WEEKS, NUMBER_OF_DAYS_IN_FOUR_WEEKS, WEEKDAYS } from "./constants";
 import { MonthYear } from "./type";
 import { daysInMonth, daysOfNextMonthWithinTheLastWeek, daysOfLastMonthWithinTheFirstWeek, getLastMonthYear, getNextMonthYear } from "./utils";
 import EventPopUp from "./EventPopUp";
@@ -25,8 +25,8 @@ export default function Month({month, year}: MonthYear) {
       </div>
       <div className={
         clsx("grid grid-cols-7 flex-grow leading-7",
-        totalDaysDisplayed === 28 ? 
-          "grid-rows-4" : totalDaysDisplayed === 35 ? "grid-rows-5" : "grid-rows-6")}>
+        totalDaysDisplayed === NUMBER_OF_DAYS_IN_FOUR_WEEKS ? 
+          "grid-rows-4" : totalDaysDisplayed === NUMBER_OF_DAYS_IN_FIVE_WEEKS ? "grid-rows-5" : "grid-rows-6")}>
         {daysOfLastMonth.map((day, id) => <Day dayId={id} day={day} month={lastMonthYear.month} year={lastMonthYear.year} />)}
         {Array.from({length: _daysInMonth}, (val, id) => id+1).map(
           (day, id) => <Day isCurrentMonth={true} dayId={id + daysOfLastMonth.length} day={day} month={month} year={year} />
