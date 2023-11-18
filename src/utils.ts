@@ -56,5 +56,5 @@ export function getLastMonthYear(month: number, year: number) {
 export function addDays(day: number, month: number, year: number, increment: number) {
 	const date = new Date(year, month - 1, day);
 	date.setDate(date.getDate() + increment);
-	return { day: date.getDay(), month: date.getMonth() + 1, year: date.getFullYear() };
+	return { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear() };
 }

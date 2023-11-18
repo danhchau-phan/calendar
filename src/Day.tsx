@@ -53,7 +53,7 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year, ev
         title: "Temp title"
       })
     } else {
-      const {day: _day, month: _month, year: _year} = addDays(day, month, year, -eventLength+1)
+      const {day: _day, month: _month, year: _year} = addDays(day, month, year, -eventLength)
       saveEvent({
         eventLength: eventLength,
         day: _day,
@@ -84,7 +84,7 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year, ev
       </div>
     </div>
     <div className={clsx("flex-grow py-2", !eventFinalized && "pointer-events-none")}>
-      {eventLength > 0 && <CalendarEvent eventLength={eventLength} eventStartDayId={eventStartDayId ?? 0} dayId={dayId}/>}
+      {eventLength !== 0 && <CalendarEvent eventLength={eventLength} eventStartDayId={eventStartDayId ?? 0} dayId={dayId}/>}
       {events.map((event) => <CalendarEvent eventLength={event.eventLength} eventStartDayId={dayId} dayId={dayId} title={event.title}/>)}
     </div>
   </div>)
