@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import clsx from "clsx";
 import { addDays, getShortMonthName, isToday } from "./utils";
 import CalendarEvent from "./Event";
@@ -30,45 +30,53 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year, ev
     } 
   }, [eventFinalized])
 
+  const onDragStart = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault();
+    addEvent();
+    setEventStartDayId(dayId);
+    setFinalDaySelectedInEvent(true);
+  }, [addEvent, setEventStartDayId, setEventStartDayId, dayId])
+
+  const onMouseOver = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault();
+    !eventFinalized && setFinalDaySelectedInEvent((selected) => (!selected));
+  }, [eventFinalized, setFinalDaySelectedInEvent])
+
+  const onMouseUp = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault();
+    if (eventLength < 0 ) {
+      saveEvent( {
+        eventLength: -eventLength,
+        day,
+        month,
+        year,
+        title: "Temp title"
+      })
+    } else {
+      const {day: _day, month: _month, year: _year} = addDays(day, month, year, -eventLength+1)
+      saveEvent({
+        eventLength: eventLength,
+        day: _day,
+        month: _month,
+        year: _year,
+        title: "Temp title"
+      })
+    }
+    finalizeEvent();
+  }, [saveEvent, finalizeEvent, eventLength, day, month, year])
+
+  const onMouseOut = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault();
+    !eventFinalized && setFinalDaySelectedInEvent((selected) => (!selected));
+  }, [eventFinalized,setFinalDaySelectedInEvent])
+
   return (
   <div 
     draggable
-    onDragStart={(e) => {
-      e.preventDefault();
-      addEvent();
-      setEventStartDayId(dayId);
-      setFinalDaySelectedInEvent(true);
-    }}
-    onMouseOver={(e) => {
-      e.preventDefault();
-      !eventFinalized && setFinalDaySelectedInEvent((selected) => (!selected));
-    }}
-    onMouseOut={(e) => {
-      e.preventDefault();
-      !eventFinalized && setFinalDaySelectedInEvent((selected) => (!selected));
-    }}
-    onMouseUp={(e) => {
-      e.preventDefault();
-      if (eventLength < 0 ) {
-        saveEvent( {
-          eventLength: -eventLength,
-          day,
-          month,
-          year,
-          title: "Temp title"
-        })
-      } else {
-        const {day: _day, month: _month, year: _year} = addDays(day, month, year, eventLength)
-        saveEvent({
-          eventLength: eventLength,
-          day: _day,
-          month: _month,
-          year: _year,
-          title: "Temp title"
-        })
-      }
-      finalizeEvent();
-    }}
+    onDragStart={onDragStart}
+    onMouseOver={onMouseOver}
+    onMouseOut={onMouseOut}
+    onMouseUp={onMouseUp}
     className={clsx("day", !isCurrentMonth && "disabled-day")}>
     <div className="day-number">
       <div className={clsx("inline-block",isToday(day,month,year) && "text-white rounded-full bg-blue-800 w-7")}>
@@ -76,7 +84,7 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year, ev
       </div>
     </div>
     <div className={clsx("flex-grow py-2", !eventFinalized && "pointer-events-none")}>
-      <CalendarEvent eventLength={eventLength} eventStartDayId={eventStartDayId ?? 0} dayId={dayId}/>
+      {eventLength > 0 && <CalendarEvent eventLength={eventLength} eventStartDayId={eventStartDayId ?? 0} dayId={dayId}/>}
       {events.map((event) => <CalendarEvent eventLength={event.eventLength} eventStartDayId={dayId} dayId={dayId} title={event.title}/>)}
     </div>
   </div>)
