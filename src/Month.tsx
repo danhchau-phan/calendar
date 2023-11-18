@@ -1,15 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
 import { NUMBER_OF_DAYS_IN_FIVE_WEEKS, NUMBER_OF_DAYS_IN_FOUR_WEEKS, WEEKDAYS } from "./constants";
-import { MonthYear } from "./type";
+import { MonthProps, MonthYear } from "./type";
 import { daysInMonth, daysOfNextMonthWithinTheLastWeek, daysOfLastMonthWithinTheFirstWeek, getLastMonthYear, getNextMonthYear } from "./utils";
 import EventPopUp from "./EventPopUp";
 import Day from "./Day";
 
 import "./Month.scss"
-import { useStore } from "./store";
 
-export default function Month({month, year}: MonthYear) {
+export default function Month({month, year, allEvents}: MonthProps) {
   // const [addEvent, setAddEvent] = useState(true)
 
   const nextMonthYear = getNextMonthYear(month, year)
@@ -20,7 +19,6 @@ export default function Month({month, year}: MonthYear) {
 
   const totalDaysDisplayed = daysOfLastMonth.length + _daysInMonth + daysOfNextMonth.length
   
-  const allEvents = useStore((state) => state.savedEvents)
   const thisMonthYearEvents = useMemo(() => allEvents[year]?.[month] ?? [], [allEvents, month, year])
   const nextMonthYearEvents = useMemo(() => allEvents[nextMonthYear.year]?.[nextMonthYear.month] ?? [], [allEvents, nextMonthYear])
   const lastMonthYearEvents = useMemo(() => allEvents[lastMonthYear.year]?.[lastMonthYear.month] ?? [], [allEvents, lastMonthYear])

@@ -22,7 +22,7 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year, ev
   useEffect(() => {
     finalDaySelectedInEvent !== null && eventStartDayId !== null && finalDaySelectedInEvent &&
         setEventLength(dayId - eventStartDayId)
-  }, [finalDaySelectedInEvent, setEventLength]);
+  }, [finalDaySelectedInEvent, setEventLength, dayId, eventStartDayId]);
 
   useEffect(() => {
     if (eventFinalized) {
@@ -35,7 +35,7 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year, ev
     addEvent();
     setEventStartDayId(dayId);
     setFinalDaySelectedInEvent(true);
-  }, [addEvent, setEventStartDayId, setEventStartDayId, dayId])
+  }, [addEvent, setEventStartDayId, dayId])
 
   const onMouseOver = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
