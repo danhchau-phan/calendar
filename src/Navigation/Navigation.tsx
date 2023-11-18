@@ -1,12 +1,12 @@
 import React from "react";
-import { MonthYear } from "./type";
-import { getLongMonthName } from "./utils";
+import { MonthYear } from "../common/type";
+import { getLongMonthName } from "../common/utils";
 import { NavArrowRight, NavArrowLeft } from 'iconoir-react';
 
 interface NavigationProps extends MonthYear {
   setMonthYear: Function
 }
-export function Navigation({month, year, setMonthYear}: NavigationProps) {
+export default function Navigation({month, year, setMonthYear}: NavigationProps) {
   
   return <div className="flex h-20 items-center border-b">
           <button className="p-2 px-3 border rounded-sm">Today</button>

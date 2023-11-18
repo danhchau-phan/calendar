@@ -44,7 +44,7 @@ export type DayProps = {
 export type MonthProps = {
 	month: number;
 	year: number;
-	allEvents: Record<number, Record<number, CalendarEvent[]>>;
+	savedEvents: Record<number, Record<number, CalendarEvent[]>>;
 };
 
 export type SavedEventParams = {

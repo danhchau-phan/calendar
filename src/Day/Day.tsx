@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react"
 import clsx from "clsx";
-import { addDays, getShortMonthName, isToday } from "./utils";
-import CalendarEvent from "./Event";
-import { CalendarState, DayProps } from "./type";
-import { useStore } from "./store";
+import { addDays, getShortMonthName, isToday } from "../common/utils";
+import CalendarEvent from "../Event/Event";
+import { CalendarState, DayProps } from "../common/type";
+import { useStore } from "../store/store";
 
 import "./Day.scss"
 
@@ -85,7 +85,7 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year, ev
     </div>
     <div className={clsx("flex-grow py-2", !eventFinalized && "pointer-events-none")}>
       {eventLength !== 0 && <CalendarEvent eventLength={eventLength} eventStartDayId={eventStartDayId ?? 0} dayId={dayId}/>}
-      {events.map((event) => <CalendarEvent eventLength={event.eventLength} eventStartDayId={dayId} dayId={dayId} title={event.title}/>)}
+      {events.map((event, id) => <CalendarEvent key={id} eventLength={event.eventLength} eventStartDayId={dayId} dayId={dayId} title={event.title}/>)}
     </div>
   </div>)
 }

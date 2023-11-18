@@ -1,6 +1,6 @@
 import React from "react";
-import { CalendarEventProps } from "./type";
-import { NUMBER_OF_DAYS_IN_WEEK } from "./constants";
+import { CalendarEventProps } from "../common/type";
+import { NUMBER_OF_DAYS_IN_WEEK } from "../common/constants";
 
 import "./Event.scss";
 

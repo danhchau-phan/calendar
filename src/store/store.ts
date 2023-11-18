@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { CalendarEvent, CalendarState, MonthYear, SavedEventParams } from "./type";
-import { compareCalendarEvents } from "./utils";
+import { CalendarEvent, CalendarState, MonthYear, SavedEventParams } from "../common/type";
+import { compareCalendarEvents } from "../common/utils";
 
 export const useStore = create<CalendarState>((set) => ({
 	eventFinalized: true,
