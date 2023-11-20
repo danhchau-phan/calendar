@@ -1,5 +1,5 @@
 .button {
-  @apply px-2 py-4 focus:text-blue-500 focus:bg-blue-100 font-semibold rounded-md;
+  @apply px-6 py-2 focus:text-blue-500 focus:shadow-sm text-white bg-blue-500 font-semibold rounded-md;
 }
 
 .text-area {

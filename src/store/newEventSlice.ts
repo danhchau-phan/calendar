@@ -12,9 +12,8 @@ export const createNewEventSlice: StateCreator<
 	eventLength: 0,
 	setEventStartDayId: (dayId: number) => set({ eventStartDayId: dayId }),
 	eventStartDayId: null,
-	savedEvents: {},
 	startAddingEvent: () => set({ eventFinalized: false, eventLength: 1 }),
-	finalizeEvent: () => set({ eventFinalized: true, eventLength: 0 }),
+	finalizeEvent: () => set({ eventFinalized: true }),
 	setEventLength: (length: number) =>
 		set((state: NewEventSlice) => ({
 			eventLength: length,

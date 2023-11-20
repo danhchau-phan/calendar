@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import clsx from "clsx";
 import { NUMBER_OF_DAYS_IN_FIVE_WEEKS, NUMBER_OF_DAYS_IN_FOUR_WEEKS, WEEKDAYS } from "../common/constants";
 import { MonthProps } from "../common/type";
@@ -9,7 +9,7 @@ import Day from "../Day/Day";
 import "./Month.scss"
 
 export default function Month({month, year, savedEvents}: MonthProps) {
-  // const [addEvent, setAddEvent] = useState(true)
+  
 
   const nextMonthYear = getNextMonthYear(month, year)
   const lastMonthYear = getLastMonthYear(month, year)
@@ -38,7 +38,6 @@ export default function Month({month, year, savedEvents}: MonthProps) {
         )}
         {daysOfNextMonth.map((day, id) => <Day key={id} dayId={id + daysOfLastMonth.length + _daysInMonth} day={day} month={nextMonthYear.month} year={nextMonthYear.year} events={nextMonthYearEvents.filter((e) => e.day.toDateString() === new Date(nextMonthYear.year, nextMonthYear.month-1, day).toDateString())}/>)}
       </div>
-      {/* {addEvent && <EventPopUp setClosePopUp={setAddEvent}/>} */}
     </div>
   )
 }
