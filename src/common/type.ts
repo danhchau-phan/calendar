@@ -10,20 +10,28 @@ export type CalendarEvent = {
 	title: string;
 };
 
-export type CalendarState = {
+export interface NewEventSlice {
 	eventFinalized: boolean;
 	eventLength: number;
-	displayedMonthYear: MonthYear;
 	eventStartDayId: number | null;
-	savedEvents: Record<number, Record<number, CalendarEvent[]>>;
 	startAddingEvent: Function;
 	finalizeEvent: Function;
 	setEventLength: Function;
-	setDisplayedMonthYear: Function;
 	setEventStartDayId: Function;
+}
+
+export interface DisplayedMonthYearSlice {
+	displayedMonthYear: MonthYear;
+	setDisplayedMonthYear: (my: MonthYear) => void;
+}
+
+export interface SavedEventsSlice {
+	savedEvents: Record<number, Record<number, CalendarEvent[]>>;
 	saveEvent: Function;
 	removeSavedEvent: Function;
-};
+}
+
+export type CalendarState = DisplayedMonthYearSlice & NewEventSlice & SavedEventsSlice;
 
 export type CalendarEventProps = {
 	eventLength: number;

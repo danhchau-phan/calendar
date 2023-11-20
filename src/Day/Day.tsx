@@ -3,20 +3,20 @@ import clsx from "clsx";
 import { addDays, getShortMonthName, isToday } from "../common/utils";
 import CalendarEvent from "../Event/Event";
 import { CalendarState, DayProps } from "../common/type";
-import { useStore } from "../store/store";
+import { useBoundStore } from "../store/store";
 
 import "./Day.scss"
 
 
 export default function Day({isCurrentMonth = false, dayId, day, month, year, events}: DayProps) {
-  const addEvent = useStore((state: CalendarState) => state.startAddingEvent)
-  const finalizeEvent = useStore((state: CalendarState) => state.finalizeEvent)
-  const eventFinalized = useStore((state) => state.eventFinalized)
-  const eventLength = useStore((state) => state.eventLength)
-  const setEventLength = useStore((state) => state.setEventLength)
-  const eventStartDayId = useStore((state) => state.eventStartDayId)
-  const setEventStartDayId = useStore((state) => state.setEventStartDayId)
-  const saveEvent = useStore((state) => state.saveEvent)
+  const addEvent = useBoundStore((state: CalendarState) => state.startAddingEvent)
+  const finalizeEvent = useBoundStore((state: CalendarState) => state.finalizeEvent)
+  const eventFinalized = useBoundStore((state) => state.eventFinalized)
+  const eventLength = useBoundStore((state) => state.eventLength)
+  const setEventLength = useBoundStore((state) => state.setEventLength)
+  const eventStartDayId = useBoundStore((state) => state.eventStartDayId)
+  const setEventStartDayId = useBoundStore((state) => state.setEventStartDayId)
+  const saveEvent = useBoundStore((state) => state.saveEvent)
   const [finalDaySelectedInEvent, setFinalDaySelectedInEvent] = useState<boolean | null>(null);
 
   useEffect(() => {

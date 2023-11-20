@@ -34,7 +34,7 @@ export default function Month({month, year, savedEvents}: MonthProps) {
           "grid-rows-4" : totalDaysDisplayed === NUMBER_OF_DAYS_IN_FIVE_WEEKS ? "grid-rows-5" : "grid-rows-6")}>
         {daysOfLastMonth.map((day, id) => <Day key={id} dayId={id} day={day} month={lastMonthYear.month} year={lastMonthYear.year} events={lastMonthYearEvents.filter((e) => e.day.toDateString() === new Date(lastMonthYear.year, lastMonthYear.month-1, day).toDateString())}/>)}
         {Array.from({length: _daysInMonth}, (val, id) => id+1).map(
-          (day, id) => <Day key={id} isCurrentMonth={true} dayId={id + daysOfLastMonth.length} day={day} month={month} year={year} events={thisMonthYearEvents.filter((e) => e.day.toDateString() === new Date(year, month-1, day).toDateString())}/>
+          (day, id) => <Day key={id} isCurrentMonth={true} dayId={id + daysOfLastMonth.length} day={day} month={month} year={year} events={thisMonthYearEvents.filter((e) => (e.day.toDateString ? e.day.toDateString() : e.day) === new Date(year, month-1, day).toDateString())}/>
         )}
         {daysOfNextMonth.map((day, id) => <Day key={id} dayId={id + daysOfLastMonth.length + _daysInMonth} day={day} month={nextMonthYear.month} year={nextMonthYear.year} events={nextMonthYearEvents.filter((e) => e.day.toDateString() === new Date(nextMonthYear.year, nextMonthYear.month-1, day).toDateString())}/>)}
       </div>
