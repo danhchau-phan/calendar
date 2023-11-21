@@ -2,6 +2,7 @@ import React from "react";
 import Month from "./Month/Month";
 import Navigation from "./Navigation/Navigation";
 import { useBoundStore } from "./store/store";
+import SideBar from "./SideBar/SideBar";
 
 function App() {
 	const monthYear = useBoundStore((state) => state.displayedMonthYear)
@@ -9,9 +10,12 @@ function App() {
 	const savedEvents = useBoundStore((state) => state.savedEvents)
 	return (
 		<>
-			<div className="mx-8 h-screen text-gray-600 flex flex-col">
+			<div className="h-screen text-gray-600 flex flex-col">
 				<Navigation setMonthYear={setDisplayedMonthYear} month={monthYear.month} year={monthYear.year} />
-				<Month {...monthYear} savedEvents= {savedEvents}/>
+				<div className="flex-grow flex flex-row">
+					<SideBar {...monthYear} />
+					<Month {...monthYear} savedEvents= {savedEvents}/>
+				</div>
 			</div>
 		</>
 	);

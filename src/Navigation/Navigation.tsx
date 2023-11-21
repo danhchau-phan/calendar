@@ -8,7 +8,7 @@ interface NavigationProps extends MonthYear {
 }
 export default function Navigation({month, year, setMonthYear}: NavigationProps) {
   
-  return <div className="flex h-20 items-center border-b">
+  return <div className="px-8 flex h-[4.5rem] items-center border-b">
           <button className="p-2 px-3 border rounded-sm">Today</button>
           <NavArrowLeft height={36} width={36} className="ml-4 p-2" onClick={() => setMonthYear({month: month-1, year})} />
           <NavArrowRight height={36} width={36} className="p-2" onClick={() => setMonthYear({month: month+1, year})} />

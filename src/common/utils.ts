@@ -1,6 +1,6 @@
 import { CalendarEvent } from "./type";
 
-export function daysInMonth(month: number, year: number) {
+export function numberOfDaysInMonth(month: number, year: number) {
 	return new Date(year, month, 0).getDate();
 }
 
@@ -13,8 +13,8 @@ export function daysOfLastMonthWithinTheFirstWeek(month: number, year: number) {
 	).reverse();
 }
 
-export function daysOfNextMonthWithinTheLastWeek(month: number, year: number) {
-	return Array.from({ length: 6 - new Date(year, month, 0).getDay() }, (val, idx) => idx + 1);
+export function numberOfDaysOfNextMonthWithinTheLastWeek(month: number, year: number) {
+	return 6 - new Date(year, month, 0).getDay();
 }
 
 export function getLongMonthName(month: number) {
