@@ -65,7 +65,7 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year, ev
       onMouseUp={onMouseUp}
       className={clsx("day", !isCurrentMonth && "disabled-day")}>
       <div className="day-number">
-        <div className={clsx("inline-block",isToday(day,month,year) && "text-white rounded-full bg-blue-800 w-7")}>
+        <div className={clsx("inline-block",isToday(day,month,year) && "text-white rounded-full bg-royal-blue w-7")}>
           {day === 1 ? <div>{day}&nbsp;{getShortMonthName(month)}</div> : day}
         </div>
       </div>

@@ -1,8 +1,11 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { NavArrowLeft, NavArrowRight } from "iconoir-react";
 import { MonthYear } from "../common/type";
-import { numberOfDaysInMonth, daysOfLastMonthWithinTheFirstWeek, numberOfDaysOfNextMonthWithinTheLastWeek, getLongMonthName } from "../common/utils";
+import { numberOfDaysInMonth, daysOfLastMonthWithinTheFirstWeek, numberOfDaysOfNextMonthWithinTheLastWeek, getLongMonthName, isToday } from "../common/utils";
 import { NUMBER_OF_DAYS_IN_SIX_WEEKS, SHORTENED_WEEKDAYS } from "../common/constants";
+import clsx from "clsx";
+
+import "./SideBar.scss";
 
 export default function SideBar(currentDisplayedMonthYear: MonthYear) {
   const [{month, year}, setMonthYear] = useState<MonthYear>(currentDisplayedMonthYear)
@@ -15,6 +18,10 @@ export default function SideBar(currentDisplayedMonthYear: MonthYear) {
 			? ({ month: 12, year: year - 1 })
 			: ({month, year});
   }, [])
+
+  useEffect(() => {
+    setMonthYear(currentDisplayedMonthYear)
+  }, [currentDisplayedMonthYear])
 
   const daysOfLastMonth = useMemo(() => daysOfLastMonthWithinTheFirstWeek(month, year), [month, year])
   const _numberOfDaysInMonth: number = useMemo(() => numberOfDaysInMonth(month, year), [month, year])
@@ -30,13 +37,20 @@ export default function SideBar(currentDisplayedMonthYear: MonthYear) {
       <NavArrowLeft height={20} width={20} onClick={() => setMonthYear(changeMonthYear({month: month-1, year: year}))} />
       <NavArrowRight height={20} width={20} onClick={() => setMonthYear(changeMonthYear({month: month+1, year: year}))} />
     </div>
-    <div className="grid grid-cols-7 gap-3">
+    <div className="grid grid-cols-7 h-48 content-stretch">
       {SHORTENED_WEEKDAYS.map((day, id) => <div className="text-center text-xs" key={id}>{day}</div>)}
-      {daysOfLastMonth.map((day, id) => <div className="text-center text-xs text-gray-400" key={id}>{day}</div>)}
+      {daysOfLastMonth.map((day, id) => <div className="sidebar-day text-gray-400" key={id}>{day}</div>)}
       {Array.from({length: _numberOfDaysInMonth}, (val, id) => id+1).map(
-        (day, id) => <div className="text-center text-xs text-gray-800" key={id}>{day}</div>
+        (day, id) => 
+        <div className="sidebar-day text-gray-800" key={id}>
+          <div className={clsx("flex items-center justify-center",
+              isToday(day,month,year) && "text-white rounded-full bg-royal-blue w-full h-full",
+              day === 1 && "rounded-full bg-hawkes-blue w-full h-full")}>
+            <div>{day}</div>
+          </div>
+        </div>
       )}
-      {Array.from({length: numberOfNextMonthDays}, (val, id) => id+1).map((day, id) => <div className="text-center text-xs text-gray-400" key={id}>{day}</div>)}
+      {Array.from({length: numberOfNextMonthDays}, (val, id) => id+1).map((day, id) => <div className="sidebar-day text-gray-400" key={id}>{day}</div>)}
     </div>
   </div>
 }
