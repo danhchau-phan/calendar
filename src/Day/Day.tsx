@@ -70,11 +70,11 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year, ev
         </div>
       </div>
       <div className={clsx("flex-grow py-2", !eventFinalized && "pointer-events-none")}>
-        {eventLength !== 0 && <CalendarEvent eventLength={eventLength} eventStartDayId={eventStartDayId ?? 0} dayId={dayId}/>}
+        {eventLength !== null && eventStartDayId !== null && <CalendarEvent eventLength={eventLength} eventStartDayId={eventStartDayId} dayId={dayId} savedEvent={false} />}
         {events.map((event, id) => <CalendarEvent key={id} eventLength={event.eventLength} eventStartDayId={dayId} dayId={dayId} title={event.title}/>)}
       </div>
     </div>
-    {eventPopUpOpened && <EventPopUp setOpenPopUp={setEventPopUpOpened} day={day} month={month} year={year} eventLength={eventLength}/>}
+    {eventPopUpOpened && eventLength !== null && <EventPopUp setOpenPopUp={setEventPopUpOpened} day={day} month={month} year={year} eventLength={eventLength}/>}
   </>
   )
 }

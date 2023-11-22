@@ -9,12 +9,12 @@ export const createNewEventSlice: StateCreator<
 	NewEventSlice
 > = (set) => ({
 	eventFinalized: true,
-	eventLength: 0,
+	eventLength: null,
 	setEventStartDayId: (dayId: number) => set({ eventStartDayId: dayId }),
 	eventStartDayId: null,
 	startAddingEvent: () => set({ eventFinalized: false, eventLength: 1 }),
 	finalizeEvent: () => set({ eventFinalized: true }),
-	setEventLength: (length: number) =>
+	setEventLength: (length: number | null) =>
 		set((state: NewEventSlice) => ({
 			eventLength: length,
 		})),

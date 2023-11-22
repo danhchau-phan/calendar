@@ -52,7 +52,7 @@ export default function EventPopUp({setOpenPopUp, day, month, year, eventLength}
       year: startDate.getFullYear(),
       title: newEventTitle || "(No title)"
     })
-    setEventLength(0);
+    setEventLength(null);
   }, [setOpenPopUp, saveEvent, timePeriod, eventLength, newEventTitle, setEventLength])
 
   return (
@@ -61,7 +61,7 @@ export default function EventPopUp({setOpenPopUp, day, month, year, eventLength}
         <div className="h-7 w-7 rounded-full hover:bg-slate-300 mr-3 flex items-center">
           <Xmark className="cursor-pointer m-auto" onClick={(e) => {
             setOpenPopUp(false);
-            setEventLength(0);
+            setEventLength(null);
           }}/>        
         </div>
       </div>

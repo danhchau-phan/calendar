@@ -3,8 +3,9 @@ import { CalendarEventProps } from "../common/type";
 import { NUMBER_OF_DAYS_IN_WEEK } from "../common/constants";
 
 import "./Event.scss";
+import clsx from "clsx";
 
-export default function CalendarEvent({eventLength, eventStartDayId, dayId, title = "(No title)"}: CalendarEventProps) {
+export default function CalendarEvent({eventLength, eventStartDayId, dayId, title = "(No title)", savedEvent = true}: CalendarEventProps) {
   const actualEventStartDayId = eventLength >= 0 ?
   eventStartDayId : eventStartDayId + eventLength
   const actualLength = Math.abs(eventLength) + 1
@@ -15,10 +16,10 @@ export default function CalendarEvent({eventLength, eventStartDayId, dayId, titl
   return <>
     {isMultiRowEvent ? <>
       {dayId === actualEventStartDayId ? 
-      <div className="event" style={{ width: `calc(${100 * (NUMBER_OF_DAYS_IN_WEEK - dayId % NUMBER_OF_DAYS_IN_WEEK)}% - 9px)`}}>{title}</div> :
+      <div className={clsx("event", !savedEvent && "shadow-xl z-10")} style={{ width: `calc(${100 * (NUMBER_OF_DAYS_IN_WEEK - dayId % NUMBER_OF_DAYS_IN_WEEK)}% - 9px)`}}>{title}</div> :
       dayId > actualEventStartDayId && dayId % NUMBER_OF_DAYS_IN_WEEK === 0 && dayId < eventEndDayId &&
-      <div className="event" style={{ width: `calc(${100 * (eventEndDayId - dayId >= NUMBER_OF_DAYS_IN_WEEK ? NUMBER_OF_DAYS_IN_WEEK : (eventEndDayId - dayId) % NUMBER_OF_DAYS_IN_WEEK)}% - 9px)`}}>{title}</div>}
+      <div className={clsx("event", !savedEvent && "shadow-xl z-10")} style={{ width: `calc(${100 * (eventEndDayId - dayId >= NUMBER_OF_DAYS_IN_WEEK ? NUMBER_OF_DAYS_IN_WEEK : (eventEndDayId - dayId) % NUMBER_OF_DAYS_IN_WEEK)}% - 9px)`}}>{title}</div>}
     </>: dayId === actualEventStartDayId && 
-    <div className="event" style={{ width: `calc(${100 * actualLength}% - 9px)`}}>{title}</div>}
+    <div className={clsx("event", !savedEvent && "shadow-xl z-10")} style={{ width: `calc(${100 * actualLength}% - 9px)`}}>{title}</div>}
     </>
 }

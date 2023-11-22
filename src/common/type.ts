@@ -12,7 +12,7 @@ export type CalendarEvent = {
 
 export interface NewEventSlice {
 	eventFinalized: boolean;
-	eventLength: number;
+	eventLength: number | null;
 	eventStartDayId: number | null;
 	startAddingEvent: Function;
 	finalizeEvent: Function;
@@ -38,6 +38,7 @@ export type CalendarEventProps = {
 	dayId: number;
 	eventStartDayId: number;
 	title?: string;
+	savedEvent?: boolean;
 };
 
 export type DayProps = {
