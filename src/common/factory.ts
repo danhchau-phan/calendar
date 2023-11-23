@@ -29,6 +29,7 @@ export function calendarEventFactory(params?: Partial<CalendarEvent>): CalendarE
 		eventLength: faker.number.int(),
 		day: faker.date.anytime(),
 		title: faker.string.alpha(),
+		placement: faker.number.int(),
 		...params,
 	};
 }

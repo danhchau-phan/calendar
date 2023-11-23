@@ -7,6 +7,7 @@ import { useBoundStore } from "../store/store";
 
 import "./Day.scss"
 import EventPopUp from "../EventPopUp/EventPopUp";
+import { EVENTS_DISPLAYED_PER_ROW, MAXIMUM_EVENTS_DISPLAYED_PER_ROW } from "../common/constants";
 
 
 export default function Day({isCurrentMonth = false, dayId, day, month, year, events}: DayProps) {
@@ -69,9 +70,11 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year, ev
           {day === 1 ? <div>{day}&nbsp;{getShortMonthName(month)}</div> : day}
         </div>
       </div>
-      <div className={clsx("flex-grow py-2", !eventFinalized && "pointer-events-none")}>
+      <div className={clsx("flex-grow py-2 grid", !eventFinalized && "pointer-events-none")} style={{
+        gridTemplateRows: `repeat(${EVENTS_DISPLAYED_PER_ROW}, minmax(0, 1fr))`
+      }}>
         {eventLength !== null && eventStartDayId !== null && <CalendarEvent eventLength={eventLength} eventStartDayId={eventStartDayId} dayId={dayId} savedEvent={false} />}
-        {events.map((event, id) => <CalendarEvent key={id} eventLength={event.eventLength} eventStartDayId={dayId} dayId={dayId} title={event.title}/>)}
+        {events.map((event, id) => <CalendarEvent key={id} eventLength={event.eventLength} eventStartDayId={dayId} dayId={dayId} title={event.title} eventPlacement={event.placement}/>)}
       </div>
     </div>
     {eventPopUpOpened && eventLength !== null && eventStartDayId !== null && <EventPopUp eventStartDayId={eventStartDayId} setOpenPopUp={setEventPopUpOpened} day={day} month={month} year={year} eventLength={eventLength}/>}

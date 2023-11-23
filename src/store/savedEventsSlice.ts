@@ -8,7 +8,7 @@ import {
 	SavedEventsSlice,
 } from "../common/type";
 import { compareCalendarEvents } from "../common/dayUtils";
-import { NUMBER_OF_DISPLAYED_EVENTS_PER_ROW } from "../common/constants";
+import { MAXIMUM_EVENTS_DISPLAYED_PER_ROW } from "../common/constants";
 import { findIndexOfImmediateGreaterElement } from "../common/utils";
 
 export const createSavedEventsSlice: StateCreator<
@@ -27,7 +27,7 @@ export const createSavedEventsSlice: StateCreator<
 				day: new Date(year, month - 1, day),
 			};
 			let placement = 0;
-			while (placement < NUMBER_OF_DISPLAYED_EVENTS_PER_ROW) {
+			while (placement < MAXIMUM_EVENTS_DISPLAYED_PER_ROW) {
 				let i = 0;
 				while (i < eventLength) {
 					if (
@@ -72,7 +72,7 @@ export const createSavedEventsSlice: StateCreator<
 							...Array.from({ length: eventLength }, (_, idx) => eventStartDayId + idx).reduce(
 								(acc, dayId) => ({
 									...acc,
-									[dayId]: Array.from({ length: NUMBER_OF_DISPLAYED_EVENTS_PER_ROW }, (_, idx) =>
+									[dayId]: Array.from({ length: MAXIMUM_EVENTS_DISPLAYED_PER_ROW }, (_, idx) =>
 										idx === placement
 											? false
 											: state.availableSpaces[year]?.[month]?.[dayId]?.[idx] ?? true

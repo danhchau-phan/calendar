@@ -41,6 +41,7 @@ export type CalendarEventProps = {
 	eventStartDayId: number;
 	title?: string;
 	savedEvent?: boolean;
+	eventPlacement?: number;
 };
 
 export type DayProps = {
