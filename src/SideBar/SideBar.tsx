@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { NavArrowLeft, NavArrowRight } from "iconoir-react";
 import { MonthYear } from "../common/type";
-import { numberOfDaysInMonth, daysOfLastMonthWithinTheFirstWeek, numberOfDaysOfNextMonthWithinTheLastWeek, getLongMonthName, isToday } from "../common/utils";
+import { numberOfDaysInMonth, daysOfLastMonthWithinTheFirstWeek, numberOfDaysOfNextMonthWithinTheLastWeek, getLongMonthName, isToday } from "../common/dayUtils";
 import { NUMBER_OF_DAYS_IN_SIX_WEEKS, SHORTENED_WEEKDAYS } from "../common/constants";
 import clsx from "clsx";
 

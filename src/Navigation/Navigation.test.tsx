@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import Navigation from "./Navigation";
 import { dateMonthYearFactory } from "../common/factory";
-import { getLongMonthName } from "../common/utils";
+import { getLongMonthName } from "../common/dayUtils";
 
 describe("Navigation", () => {
 	it("renders successfully", async () => {

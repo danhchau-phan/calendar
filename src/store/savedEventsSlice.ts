@@ -7,7 +7,9 @@ import {
 	SavedEventParams,
 	SavedEventsSlice,
 } from "../common/type";
-import { compareCalendarEvents } from "../common/utils";
+import { compareCalendarEvents } from "../common/dayUtils";
+import { NUMBER_OF_DISPLAYED_EVENTS_PER_ROW } from "../common/constants";
+import { findIndexOfImmediateGreaterElement } from "../common/utils";
 
 export const createSavedEventsSlice: StateCreator<
 	DisplayedMonthYearSlice & NewEventSlice & SavedEventsSlice,
@@ -16,40 +18,76 @@ export const createSavedEventsSlice: StateCreator<
 	SavedEventsSlice
 > = (set) => ({
 	savedEvents: {},
-	saveEvent: ({ eventLength, day, month, year, title }: SavedEventParams) =>
+	saveEvent: ({ eventStartDayId, eventLength, day, month, year, title }: SavedEventParams) =>
 		set((state: SavedEventsSlice) => {
-			const event: CalendarEvent = {
+			const event: Partial<CalendarEvent> & Pick<CalendarEvent, "day"> = {
 				eventId: crypto.randomUUID(),
 				eventLength,
 				title,
 				day: new Date(year, month - 1, day),
 			};
-			if (state.savedEvents[year] === undefined)
-				return {
-					savedEvents: Object.assign({}, state.savedEvents, { [year]: { [month]: [event] } }),
-				};
-			else if (state.savedEvents[year][month] === undefined)
-				return {
-					savedEvents: Object.assign({}, state.savedEvents, {
-						[year]: Object.assign({}, state.savedEvents[year], { [month]: [event] }),
-					}),
-				};
+			let placement = 0;
+			while (placement < NUMBER_OF_DISPLAYED_EVENTS_PER_ROW) {
+				let i = 0;
+				while (i < eventLength) {
+					if (
+						state.availableSpaces[year]?.[month]?.[eventStartDayId + i]?.[placement] === true ||
+						state.availableSpaces[year]?.[month]?.[eventStartDayId + i]?.[placement] === undefined
+					) {
+						i++;
+						continue;
+					} else break;
+				}
+				if (i === eventLength) break;
+				else placement++;
+			}
+
+			const allEventsInMonth = [...(state.savedEvents[year]?.[month] ?? {})];
+			const idx = findIndexOfImmediateGreaterElement(
+				allEventsInMonth,
+				event,
+				compareCalendarEvents
+			);
+
 			return {
-				savedEvents: Object.assign({}, state.savedEvents, {
-					[year]: Object.assign({}, state.savedEvents[year], {
-						[month]: [...state.savedEvents[year][month], event].sort(compareCalendarEvents),
-					}),
-				}),
+				savedEvents: {
+					...state.savedEvents,
+					[year]: {
+						...(state.savedEvents[year] ?? {}),
+						[month]: [
+							...allEventsInMonth.slice(0, idx),
+							{ ...event, placement } as CalendarEvent,
+							...allEventsInMonth
+								.slice(idx, allEventsInMonth.length)
+								.map((e) => ({ ...e, placement })),
+						],
+					},
+				},
+				availableSpaces: {
+					...state.availableSpaces,
+					[year]: {
+						...state.availableSpaces[year],
+						[month]: {
+							...state.availableSpaces[year]?.[month],
+							...Array.from({ length: eventLength }, (_, idx) => eventStartDayId + idx).reduce(
+								(acc, dayId) => ({
+									...acc,
+									[dayId]: Array.from({ length: NUMBER_OF_DISPLAYED_EVENTS_PER_ROW }, (_, idx) =>
+										idx === placement
+											? false
+											: state.availableSpaces[year]?.[month]?.[dayId]?.[idx] ?? true
+									),
+								}),
+								{}
+							),
+						},
+					},
+				},
 			};
 		}),
 	removeSavedEvent: (eventId: string, { month, year }: MonthYear) =>
 		set((state: SavedEventsSlice) => ({
-			savedEvents: Object.assign(
-				{},
-				state.savedEvents,
-				Object.assign({}, state.savedEvents[year], {
-					[month]: state.savedEvents[year][month].filter((event) => event.eventId !== eventId),
-				})
-			),
+			// TODO
 		})),
+	availableSpaces: {},
 });

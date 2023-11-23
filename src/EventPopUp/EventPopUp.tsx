@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Xmark } from "iconoir-react";
 
 import { useBoundStore } from "../store/store";
-import { addDays } from "../common/utils";
+import { addDays } from "../common/dayUtils";
 import "./EventPopUp.scss";
 
 interface PopUpProps {
@@ -10,10 +10,11 @@ interface PopUpProps {
   day: number,
   month: number,
   year: number,
-  eventLength: number
+  eventLength: number,
+  eventStartDayId: number
 }
 
-export default function EventPopUp({setOpenPopUp, day, month, year, eventLength}: PopUpProps) {
+export default function EventPopUp({eventStartDayId, setOpenPopUp, day, month, year, eventLength}: PopUpProps) {
   const saveEvent = useBoundStore((state) => state.saveEvent)
   const setEventLength = useBoundStore((state) => state.setEventLength)  
   const [newEventTitle, setNewEventTitle] = useState("");
@@ -46,6 +47,7 @@ export default function EventPopUp({setOpenPopUp, day, month, year, eventLength}
     setOpenPopUp(false);
     const startDate = timePeriod.startDate
     startDate && saveEvent( {
+      eventStartDayId,
       eventLength: Math.abs(eventLength),
       day: startDate.getDate(),
       month: startDate.getMonth()+1,
@@ -53,7 +55,7 @@ export default function EventPopUp({setOpenPopUp, day, month, year, eventLength}
       title: newEventTitle || "(No title)"
     })
     setEventLength(null);
-  }, [setOpenPopUp, saveEvent, timePeriod, eventLength, newEventTitle, setEventLength])
+  }, [eventStartDayId, setOpenPopUp, saveEvent, timePeriod, eventLength, newEventTitle, setEventLength])
 
   return (
     <div className="fixed z-10 w-96 h-fit bg-white rounded-lg shadow-lg">

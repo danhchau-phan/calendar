@@ -1,6 +1,6 @@
 import React from "react";
 import { MonthYear } from "../common/type";
-import { getLongMonthName } from "../common/utils";
+import { getLongMonthName } from "../common/dayUtils";
 import { NavArrowRight, NavArrowLeft } from 'iconoir-react';
 
 interface NavigationProps extends MonthYear {

@@ -8,6 +8,7 @@ export type CalendarEvent = {
 	eventLength: number;
 	day: Date;
 	title: string;
+	placement: number;
 };
 
 export interface NewEventSlice {
@@ -29,6 +30,7 @@ export interface SavedEventsSlice {
 	savedEvents: Record<number, Record<number, CalendarEvent[]>>;
 	saveEvent: Function;
 	removeSavedEvent: Function;
+	availableSpaces: Record<number, Record<number, Record<number, boolean[]>>>; // year -> month -> dayId -> availableSpaces[]
 }
 
 export type CalendarState = DisplayedMonthYearSlice & NewEventSlice & SavedEventsSlice;
@@ -57,6 +59,7 @@ export type MonthProps = {
 };
 
 export type SavedEventParams = {
+	eventStartDayId: number;
 	eventLength: number;
 	day: number;
 	month: number;

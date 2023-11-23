@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import clsx from "clsx";
 import { NUMBER_OF_DAYS_IN_FIVE_WEEKS, NUMBER_OF_DAYS_IN_FOUR_WEEKS, WEEKDAYS } from "../common/constants";
 import { MonthProps } from "../common/type";
-import { numberOfDaysInMonth, numberOfDaysOfNextMonthWithinTheLastWeek, daysOfLastMonthWithinTheFirstWeek, getLastMonthYear, getNextMonthYear } from "../common/utils";
+import { numberOfDaysInMonth, numberOfDaysOfNextMonthWithinTheLastWeek, daysOfLastMonthWithinTheFirstWeek, getLastMonthYear, getNextMonthYear } from "../common/dayUtils";
 import Day from "../Day/Day";
 
 import "./Month.scss"
@@ -31,11 +31,33 @@ export default function Month({month, year, savedEvents}: MonthProps) {
         clsx("grid grid-cols-7 flex-grow leading-7 text-sm",
         totalDaysDisplayed === NUMBER_OF_DAYS_IN_FOUR_WEEKS ? 
           "grid-rows-4" : totalDaysDisplayed === NUMBER_OF_DAYS_IN_FIVE_WEEKS ? "grid-rows-5" : "grid-rows-6")}>
-        {daysOfLastMonth.map((day, id) => <Day key={id} dayId={id} day={day} month={lastMonthYear.month} year={lastMonthYear.year} events={lastMonthYearEvents.filter((e) => e.day.toDateString() === new Date(lastMonthYear.year, lastMonthYear.month-1, day).toDateString())}/>)}
+        {daysOfLastMonth.map((day, id) => 
+          <Day
+            key={id}
+            dayId={id}
+            day={day}
+            month={lastMonthYear.month}
+            year={lastMonthYear.year}
+            events={lastMonthYearEvents.filter((e) => e.day.toDateString() === new Date(lastMonthYear.year, lastMonthYear.month-1, day).toDateString())}/>)}
         {Array.from({length: _numberOfDaysInMonth}, (val, id) => id+1).map(
-          (day, id) => <Day key={id} isCurrentMonth={true} dayId={id + daysOfLastMonth.length} day={day} month={month} year={year} events={thisMonthYearEvents.filter((e) => (e.day.toDateString ? e.day.toDateString() : e.day) === new Date(year, month-1, day).toDateString())}/>
+          (day, id) =>
+          <Day
+            key={id}
+            isCurrentMonth={true}
+            dayId={id + daysOfLastMonth.length}
+            day={day}
+            month={month}
+            year={year}
+            events={thisMonthYearEvents.filter((e) => e.day.toDateString() === new Date(year, month-1, day).toDateString())}/>
         )}
-        {Array.from({length: numberOfNextMonthDays}, (val, id) => id+1).map((day, id) => <Day key={id} dayId={id + daysOfLastMonth.length + _numberOfDaysInMonth} day={day} month={nextMonthYear.month} year={nextMonthYear.year} events={nextMonthYearEvents.filter((e) => e.day.toDateString() === new Date(nextMonthYear.year, nextMonthYear.month-1, day).toDateString())}/>)}
+        {Array.from({length: numberOfNextMonthDays}, (val, id) => id+1).map((day, id) => 
+          <Day
+            key={id}
+            dayId={id + daysOfLastMonth.length + _numberOfDaysInMonth}
+            day={day}
+            month={nextMonthYear.month}
+            year={nextMonthYear.year}
+            events={nextMonthYearEvents.filter((e) => e.day.toDateString() === new Date(nextMonthYear.year, nextMonthYear.month-1, day).toDateString())}/>)}
       </div>
     </div>
   )

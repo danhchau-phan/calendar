@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react"
 import clsx from "clsx";
-import { getShortMonthName, isToday } from "../common/utils";
+import { getShortMonthName, isToday } from "../common/dayUtils";
 import CalendarEvent from "../Event/Event";
 import { CalendarState, DayProps } from "../common/type";
 import { useBoundStore } from "../store/store";
@@ -74,7 +74,7 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year, ev
         {events.map((event, id) => <CalendarEvent key={id} eventLength={event.eventLength} eventStartDayId={dayId} dayId={dayId} title={event.title}/>)}
       </div>
     </div>
-    {eventPopUpOpened && eventLength !== null && <EventPopUp setOpenPopUp={setEventPopUpOpened} day={day} month={month} year={year} eventLength={eventLength}/>}
+    {eventPopUpOpened && eventLength !== null && eventStartDayId !== null && <EventPopUp eventStartDayId={eventStartDayId} setOpenPopUp={setEventPopUpOpened} day={day} month={month} year={year} eventLength={eventLength}/>}
   </>
   )
 }

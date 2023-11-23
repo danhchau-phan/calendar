@@ -9,3 +9,5 @@ export const NUMBER_OF_DAYS_IN_FOUR_WEEKS = 28;
 export const NUMBER_OF_DAYS_IN_FIVE_WEEKS = 35;
 
 export const NUMBER_OF_DAYS_IN_SIX_WEEKS = 42;
+
+export const NUMBER_OF_DISPLAYED_EVENTS_PER_ROW = 3;
