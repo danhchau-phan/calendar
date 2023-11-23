@@ -1,13 +1,13 @@
 import React, { useMemo } from "react";
 import clsx from "clsx";
-import { NUMBER_OF_DAYS_IN_FIVE_WEEKS, NUMBER_OF_DAYS_IN_FOUR_WEEKS, WEEKDAYS } from "../common/constants";
+import { EVENTS_DISPLAYED_PER_ROW, NUMBER_OF_DAYS_IN_FIVE_WEEKS, NUMBER_OF_DAYS_IN_FOUR_WEEKS, WEEKDAYS } from "../common/constants";
 import { MonthProps } from "../common/type";
 import { numberOfDaysInMonth, numberOfDaysOfNextMonthWithinTheLastWeek, daysOfLastMonthWithinTheFirstWeek, getLastMonthYear, getNextMonthYear } from "../common/dayUtils";
 import Day from "../Day/Day";
 
 import "./Month.scss"
 
-export default function Month({month, year, savedEvents}: MonthProps) {
+export default function Month({month, year, savedEvents, occupiedSpaces}: MonthProps) {
   
 
   const nextMonthYear = useMemo(() => getNextMonthYear(month, year), [month, year])
@@ -38,26 +38,38 @@ export default function Month({month, year, savedEvents}: MonthProps) {
             day={day}
             month={lastMonthYear.month}
             year={lastMonthYear.year}
-            events={lastMonthYearEvents.filter((e) => e.day.toDateString() === new Date(lastMonthYear.year, lastMonthYear.month-1, day).toDateString())}/>)}
+            events={lastMonthYearEvents.filter((e) => e.day.toDateString() === new Date(lastMonthYear.year, lastMonthYear.month-1, day).toDateString())}
+            numberOfUndisplayedEvents={
+              (occupiedSpaces[lastMonthYear.year]?.[lastMonthYear.month]?.[id] ?? []).reduce((acc, val, idx, _) => idx > EVENTS_DISPLAYED_PER_ROW - 1 ? acc + val : acc, 0)
+            }
+            />)}
         {Array.from({length: _numberOfDaysInMonth}, (val, id) => id+1).map(
           (day, id) =>
           <Day
-            key={id}
-            isCurrentMonth={true}
-            dayId={id + daysOfLastMonth.length}
-            day={day}
-            month={month}
-            year={year}
-            events={thisMonthYearEvents.filter((e) => e.day.toDateString() === new Date(year, month-1, day).toDateString())}/>
-        )}
+          key={id}
+          isCurrentMonth={true}
+          dayId={id + daysOfLastMonth.length}
+          day={day}
+          month={month}
+          year={year}
+          events={thisMonthYearEvents.filter((e) => e.day.toDateString() === new Date(year, month-1, day).toDateString())}
+          numberOfUndisplayedEvents={
+            (occupiedSpaces[year]?.[month]?.[id] ?? []).reduce((acc, val, idx, _) => idx > EVENTS_DISPLAYED_PER_ROW - 1 ? acc + val : acc, 0)
+          }
+          />
+          )}
         {Array.from({length: numberOfNextMonthDays}, (val, id) => id+1).map((day, id) => 
           <Day
-            key={id}
-            dayId={id + daysOfLastMonth.length + _numberOfDaysInMonth}
-            day={day}
-            month={nextMonthYear.month}
-            year={nextMonthYear.year}
-            events={nextMonthYearEvents.filter((e) => e.day.toDateString() === new Date(nextMonthYear.year, nextMonthYear.month-1, day).toDateString())}/>)}
+          key={id}
+          dayId={id + daysOfLastMonth.length + _numberOfDaysInMonth}
+          day={day}
+          month={nextMonthYear.month}
+          year={nextMonthYear.year}
+          events={nextMonthYearEvents.filter((e) => e.day.toDateString() === new Date(nextMonthYear.year, nextMonthYear.month-1, day).toDateString())}
+          numberOfUndisplayedEvents={
+            (occupiedSpaces[nextMonthYear.year]?.[nextMonthYear.month]?.[id] ?? []).reduce((acc, val, idx, _) => idx > EVENTS_DISPLAYED_PER_ROW - 1 ? acc + val : acc, 0)
+          }
+          />)}
       </div>
     </div>
   )

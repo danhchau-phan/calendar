@@ -30,7 +30,7 @@ export interface SavedEventsSlice {
 	savedEvents: Record<number, Record<number, CalendarEvent[]>>;
 	saveEvent: Function;
 	removeSavedEvent: Function;
-	availableSpaces: Record<number, Record<number, Record<number, boolean[]>>>; // year -> month -> dayId -> availableSpaces[]
+	occupiedSpaces: Record<number, Record<number, Record<number, number[]>>>; // year -> month -> dayId -> occupiedSpaces[]
 }
 
 export type CalendarState = DisplayedMonthYearSlice & NewEventSlice & SavedEventsSlice;
@@ -51,12 +51,14 @@ export type DayProps = {
 	month: number;
 	year: number;
 	events: CalendarEvent[];
+	numberOfUndisplayedEvents: number;
 };
 
 export type MonthProps = {
 	month: number;
 	year: number;
 	savedEvents: Record<number, Record<number, CalendarEvent[]>>;
+	occupiedSpaces: Record<number, Record<number, Record<number, number[]>>>;
 };
 
 export type SavedEventParams = {

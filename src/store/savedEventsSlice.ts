@@ -31,8 +31,8 @@ export const createSavedEventsSlice: StateCreator<
 				let i = 0;
 				while (i < eventLength) {
 					if (
-						state.availableSpaces[year]?.[month]?.[eventStartDayId + i]?.[placement] === true ||
-						state.availableSpaces[year]?.[month]?.[eventStartDayId + i]?.[placement] === undefined
+						state.occupiedSpaces[year]?.[month]?.[eventStartDayId + i]?.[placement] === 0 ||
+						state.occupiedSpaces[year]?.[month]?.[eventStartDayId + i]?.[placement] === undefined
 					) {
 						i++;
 						continue;
@@ -63,19 +63,19 @@ export const createSavedEventsSlice: StateCreator<
 						],
 					},
 				},
-				availableSpaces: {
-					...state.availableSpaces,
+				occupiedSpaces: {
+					...state.occupiedSpaces,
 					[year]: {
-						...state.availableSpaces[year],
+						...state.occupiedSpaces[year],
 						[month]: {
-							...state.availableSpaces[year]?.[month],
+							...state.occupiedSpaces[year]?.[month],
 							...Array.from({ length: eventLength }, (_, idx) => eventStartDayId + idx).reduce(
 								(acc, dayId) => ({
 									...acc,
 									[dayId]: Array.from({ length: MAXIMUM_EVENTS_DISPLAYED_PER_ROW }, (_, idx) =>
 										idx === placement
-											? false
-											: state.availableSpaces[year]?.[month]?.[dayId]?.[idx] ?? true
+											? (state.occupiedSpaces[year]?.[month]?.[dayId]?.[idx] ?? 0) + 1
+											: state.occupiedSpaces[year]?.[month]?.[dayId]?.[idx] ?? 0
 									),
 								}),
 								{}
@@ -89,5 +89,5 @@ export const createSavedEventsSlice: StateCreator<
 		set((state: SavedEventsSlice) => ({
 			// TODO
 		})),
-	availableSpaces: {},
+	occupiedSpaces: {},
 });

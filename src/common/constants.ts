@@ -12,4 +12,4 @@ export const NUMBER_OF_DAYS_IN_SIX_WEEKS = 42;
 
 export const MAXIMUM_EVENTS_DISPLAYED_PER_ROW = 4;
 
-export const EVENTS_DISPLAYED_PER_ROW = 3;
+export const EVENTS_DISPLAYED_PER_ROW = 4;

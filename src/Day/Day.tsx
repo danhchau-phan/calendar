@@ -7,10 +7,10 @@ import { useBoundStore } from "../store/store";
 
 import "./Day.scss"
 import EventPopUp from "../EventPopUp/EventPopUp";
-import { EVENTS_DISPLAYED_PER_ROW, MAXIMUM_EVENTS_DISPLAYED_PER_ROW } from "../common/constants";
+import { EVENTS_DISPLAYED_PER_ROW } from "../common/constants";
 
 
-export default function Day({isCurrentMonth = false, dayId, day, month, year, events}: DayProps) {
+export default function Day({isCurrentMonth = false, dayId, day, month, year, events, numberOfUndisplayedEvents = 0}: DayProps) {
   const addEvent = useBoundStore((state: CalendarState) => state.startAddingEvent)
   const eventFinalized = useBoundStore((state) => state.eventFinalized)
   const eventLength = useBoundStore((state) => state.eventLength)
@@ -74,7 +74,15 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year, ev
         gridTemplateRows: `repeat(${EVENTS_DISPLAYED_PER_ROW}, minmax(0, 1fr))`
       }}>
         {eventLength !== null && eventStartDayId !== null && <CalendarEvent eventLength={eventLength} eventStartDayId={eventStartDayId} dayId={dayId} savedEvent={false} />}
-        {events.map((event, id) => <CalendarEvent key={id} eventLength={event.eventLength} eventStartDayId={dayId} dayId={dayId} title={event.title} eventPlacement={event.placement}/>)}
+        {events.map((event, id) => 
+          event.placement < EVENTS_DISPLAYED_PER_ROW - 1 ? 
+          <CalendarEvent key={id} eventLength={event.eventLength} eventStartDayId={dayId} dayId={dayId} title={event.title} eventPlacement={event.placement}/> :
+          event.placement === EVENTS_DISPLAYED_PER_ROW - 1 && numberOfUndisplayedEvents === 0 &&
+          <CalendarEvent key={id} eventLength={event.eventLength} eventStartDayId={dayId} dayId={dayId} title={event.title} eventPlacement={event.placement}/>
+          )}
+        {numberOfUndisplayedEvents > 0 && <div style={{ 
+        gridRowStart: EVENTS_DISPLAYED_PER_ROW,
+      }}>{numberOfUndisplayedEvents} more</div>}
       </div>
     </div>
     {eventPopUpOpened && eventLength !== null && eventStartDayId !== null && <EventPopUp eventStartDayId={eventStartDayId} setOpenPopUp={setEventPopUpOpened} day={day} month={month} year={year} eventLength={eventLength}/>}
