@@ -47,7 +47,7 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year, ev
 
   const onMouseUp = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
-    finalizeEvent();
+    finalizeEvent(); 
     setEventPopUpOpened(true);
   }, [setEventPopUpOpened, finalizeEvent])
 
@@ -70,9 +70,7 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year, ev
           {day === 1 ? <div>{day}&nbsp;{getShortMonthName(month)}</div> : day}
         </div>
       </div>
-      <div className={clsx("flex-grow py-2 grid", !eventFinalized && "pointer-events-none")} style={{
-        gridTemplateRows: `repeat(${EVENTS_DISPLAYED_PER_ROW}, minmax(0, 1fr))`
-      }}>
+      <div className={clsx("flex-grow py-2 grid", !eventFinalized && "pointer-events-none", `grid-rows-${EVENTS_DISPLAYED_PER_ROW} grid-cols-1`)}>
         {eventLength !== null && eventStartDayId !== null && <CalendarEvent eventLength={eventLength} eventStartDayId={eventStartDayId} dayId={dayId} savedEvent={false} />}
         {events.map((event, id) => 
           event.placement < EVENTS_DISPLAYED_PER_ROW - 1 ? 
