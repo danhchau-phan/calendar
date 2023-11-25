@@ -26,23 +26,22 @@ export const createSavedEventsSlice: StateCreator<
 				title,
 				day: new Date(year, month - 1, day),
 			};
-			let placement = 0;
-			while (placement < MAXIMUM_EVENTS_DISPLAYED_PER_ROW) {
+			let placement = -1;
+			do {
+				placement++;
 				let i = 0;
-				while (i < eventLength) {
+				while (i <= eventLength) {
 					if (
 						state.occupiedSpaces[year]?.[month]?.[eventStartDayId + i]?.[placement] === 0 ||
 						state.occupiedSpaces[year]?.[month]?.[eventStartDayId + i]?.[placement] === undefined
 					) {
 						i++;
-						continue;
 					} else break;
 				}
-				if (i === eventLength) break;
-				else placement++;
-			}
+				if (i === eventLength + 1) break;
+			} while (placement + 1 < MAXIMUM_EVENTS_DISPLAYED_PER_ROW);
 
-			const allEventsInMonth = [...(state.savedEvents[year]?.[month] ?? {})];
+			const allEventsInMonth = [...(state.savedEvents[year]?.[month] ?? [])];
 			const idx = findIndexOfImmediateGreaterElement(
 				allEventsInMonth,
 				event,
@@ -57,9 +56,7 @@ export const createSavedEventsSlice: StateCreator<
 						[month]: [
 							...allEventsInMonth.slice(0, idx),
 							{ ...event, placement } as CalendarEvent,
-							...allEventsInMonth
-								.slice(idx, allEventsInMonth.length)
-								.map((e) => ({ ...e, placement })),
+							...allEventsInMonth.slice(idx, allEventsInMonth.length),
 						],
 					},
 				},
@@ -68,8 +65,8 @@ export const createSavedEventsSlice: StateCreator<
 					[year]: {
 						...state.occupiedSpaces[year],
 						[month]: {
-							...state.occupiedSpaces[year]?.[month],
-							...Array.from({ length: eventLength }, (_, idx) => eventStartDayId + idx).reduce(
+							...(state.occupiedSpaces[year]?.[month] ?? {}),
+							...Array.from({ length: eventLength + 1 }, (_, idx) => eventStartDayId + idx).reduce(
 								(acc, dayId) => ({
 									...acc,
 									[dayId]: Array.from({ length: MAXIMUM_EVENTS_DISPLAYED_PER_ROW }, (_, idx) =>

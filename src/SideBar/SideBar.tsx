@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { NavArrowLeft, NavArrowRight } from "iconoir-react";
+import ChevronLeft from "@mui/icons-material/ChevronLeft";
+import ChevronRight from "@mui/icons-material/ChevronRight";
 import { MonthYear } from "../common/type";
 import { numberOfDaysInMonth, daysOfLastMonthWithinTheFirstWeek, numberOfDaysOfNextMonthWithinTheLastWeek, getLongMonthName, isToday } from "../common/dayUtils";
 import { NUMBER_OF_DAYS_IN_SIX_WEEKS, SHORTENED_WEEKDAYS } from "../common/constants";
@@ -34,8 +35,8 @@ export default function SideBar(currentDisplayedMonthYear: MonthYear) {
   return <div className="w-[256px] pt-[84px] px-8">
     <div className="flex flex-row items-center mb-2">
       <div className="text-lg flex-grow">{getLongMonthName(month)} {year}</div>
-      <NavArrowLeft height={20} width={20} onClick={() => setMonthYear(changeMonthYear({month: month-1, year: year}))} />
-      <NavArrowRight height={20} width={20} onClick={() => setMonthYear(changeMonthYear({month: month+1, year: year}))} />
+      <ChevronLeft className="cursor-pointer" style={{ fontSize: 20 }} onClick={() => setMonthYear(changeMonthYear({month: month-1, year: year}))} />
+      <ChevronRight className="cursor-pointer" style={{ fontSize: 20 }} onClick={() => setMonthYear(changeMonthYear({month: month+1, year: year}))} />
     </div>
     <div className="grid grid-cols-7 h-48 content-stretch">
       {SHORTENED_WEEKDAYS.map((day, id) => <div className="text-center text-xs" key={id}>{day}</div>)}

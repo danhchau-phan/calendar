@@ -50,8 +50,9 @@ export type DayProps = {
 	day: number;
 	month: number;
 	year: number;
-	events: CalendarEvent[];
+	saveEvents: CalendarEvent[];
 	numberOfUndisplayedEvents: number;
+	dayToDayIdMapping: Record<number, number>;
 };
 
 export type MonthProps = {

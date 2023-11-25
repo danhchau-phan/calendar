@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Xmark } from "iconoir-react";
-
+import Close from "@mui/icons-material/Close";
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useBoundStore } from "../store/store";
 import { addDays } from "../common/dayUtils";
 import "./EventPopUp.scss";
@@ -61,7 +61,7 @@ export default function EventPopUp({eventStartDayId, setOpenPopUp, day, month, y
     <div className="fixed z-10 w-96 h-fit bg-white rounded-lg shadow-lg">
       <div className="bg-slate-200 h-10 rounded-t-lg flex flex-row justify-end items-center">
         <div className="h-7 w-7 rounded-full hover:bg-slate-300 mr-3 flex items-center">
-          <Xmark className="cursor-pointer m-auto" onClick={(e) => {
+          <Close className="cursor-pointer m-auto" onClick={() => {
             setOpenPopUp(false);
             setEventLength(null);
           }}/>        
@@ -70,12 +70,15 @@ export default function EventPopUp({eventStartDayId, setOpenPopUp, day, month, y
       <div className="ml-8 mr-4 mt-8">
         <input placeholder="Add title and time" onChange={(e) => setNewEventTitle(e.target.value)} value={newEventTitle}
           className="text-area"/>
-        <div>{`${timePeriod.startDate?.toDateString() || ""} - ${timePeriod.endDate?.toDateString() || ""}`}</div>
-          <div className="float-right py-4"> 
-            <button className="button" onClick={onSave}>
-              Save
-            </button>
-          </div>
+        <div>
+          <AccessTimeIcon className="inline-block mr-2"/>
+          {`${timePeriod.startDate?.toDateString() || ""} - ${timePeriod.endDate?.toDateString() || ""}`}
+        </div>
+        <div className="float-right py-4"> 
+          <button className="button" onClick={onSave}>
+            Save
+          </button>
+        </div>
       </div>
     </div>)
 }

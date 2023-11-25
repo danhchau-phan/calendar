@@ -10,7 +10,7 @@ import EventPopUp from "../EventPopUp/EventPopUp";
 import { EVENTS_DISPLAYED_PER_ROW } from "../common/constants";
 
 
-export default function Day({isCurrentMonth = false, dayId, day, month, year, events, numberOfUndisplayedEvents = 0}: DayProps) {
+export default function Day({isCurrentMonth = false, dayId, day, month, year, saveEvents, numberOfUndisplayedEvents = 0, dayToDayIdMapping}: DayProps) {
   const addEvent = useBoundStore((state: CalendarState) => state.startAddingEvent)
   const eventFinalized = useBoundStore((state) => state.eventFinalized)
   const eventLength = useBoundStore((state) => state.eventLength)
@@ -70,13 +70,15 @@ export default function Day({isCurrentMonth = false, dayId, day, month, year, ev
           {day === 1 ? <div>{day}&nbsp;{getShortMonthName(month)}</div> : day}
         </div>
       </div>
-      <div className={clsx("flex-grow py-2 grid", !eventFinalized && "pointer-events-none", `grid-rows-${EVENTS_DISPLAYED_PER_ROW} grid-cols-1`)}>
+      <div className={clsx(`py-2 relative grid grid-cols-1 flex-grow`, !eventFinalized && "pointer-events-none")} style={{
+        gridTemplateRows: `repeat(${EVENTS_DISPLAYED_PER_ROW}, minmax(0, 1fr))`
+      }}>
         {eventLength !== null && eventStartDayId !== null && <CalendarEvent eventLength={eventLength} eventStartDayId={eventStartDayId} dayId={dayId} savedEvent={false} />}
-        {events.map((event, id) => 
+        {saveEvents.map((event, id) => 
           event.placement < EVENTS_DISPLAYED_PER_ROW - 1 ? 
-          <CalendarEvent key={id} eventLength={event.eventLength} eventStartDayId={dayId} dayId={dayId} title={event.title} eventPlacement={event.placement}/> :
+          <CalendarEvent key={id} eventLength={event.eventLength} eventStartDayId={dayToDayIdMapping[event.day.getDate()]} dayId={dayId} title={event.title} eventPlacement={event.placement}/> :
           event.placement === EVENTS_DISPLAYED_PER_ROW - 1 && numberOfUndisplayedEvents === 0 &&
-          <CalendarEvent key={id} eventLength={event.eventLength} eventStartDayId={dayId} dayId={dayId} title={event.title} eventPlacement={event.placement}/>
+          <CalendarEvent key={id} eventLength={event.eventLength} eventStartDayId={dayToDayIdMapping[event.day.getDate()]} dayId={dayId} title={event.title} eventPlacement={event.placement}/>
           )}
         {numberOfUndisplayedEvents > 0 && <div style={{ 
         gridRowStart: EVENTS_DISPLAYED_PER_ROW,

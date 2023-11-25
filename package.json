@@ -15,7 +15,6 @@
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "clsx": "^2.0.0",
-    "iconoir-react": "^7.0.2",
     "react": "^18.2.0",
     "react-calendar": "^4.6.1",
     "react-dom": "^18.2.0",

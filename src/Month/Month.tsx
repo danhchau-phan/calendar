@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import clsx from "clsx";
 import { EVENTS_DISPLAYED_PER_ROW, NUMBER_OF_DAYS_IN_FIVE_WEEKS, NUMBER_OF_DAYS_IN_FOUR_WEEKS, WEEKDAYS } from "../common/constants";
 import { MonthProps } from "../common/type";
@@ -22,8 +22,36 @@ export default function Month({month, year, savedEvents, occupiedSpaces}: MonthP
   const nextMonthYearEvents = useMemo(() => savedEvents[nextMonthYear.year]?.[nextMonthYear.month] ?? [], [savedEvents, nextMonthYear])
   const lastMonthYearEvents = useMemo(() => savedEvents[lastMonthYear.year]?.[lastMonthYear.month] ?? [], [savedEvents, lastMonthYear])
 
+  const lastMonthDayToDayIdMapping = useMemo(() => {
+    const mapping :Record<number, number> = {}
+    daysOfLastMonth.forEach((day, id) => mapping[day] = id)
+    return mapping
+  }, [daysOfLastMonth])
+  
+  const thisMonthDayToDayIdMapping = useMemo(() => {
+    const mapping :Record<number, number> = {}
+    Array.from({length: _numberOfDaysInMonth}, (_, id) => id+1).forEach((day, id) => mapping[day] = id+daysOfLastMonth.length)
+    return mapping
+  }, [_numberOfDaysInMonth, daysOfLastMonth])
+
+  const nextMonthDayToDayIdMapping = useMemo(() => {
+    const mapping :Record<number, number> = {}
+    Array.from(
+      {length: numberOfNextMonthDays}, 
+      (_, id) => id + 1).forEach((day, id) => mapping[day] = id + daysOfLastMonth.length + _numberOfDaysInMonth)
+    return mapping
+  }, [_numberOfDaysInMonth, daysOfLastMonth, numberOfNextMonthDays])
+
+  
+
+  useEffect(() => {
+    document.getElementById("prev-month-button")?.addEventListener("click", () => {
+      document.getElementById("month-container")?.classList.add("slide-right")
+    })
+  })
+
   return (
-    <div className="flex-grow flex flex-col mb-2 border-l">
+    <div id="month-container" className="flex-grow flex flex-col mb-2 border-l">
       <div className="grid grid-cols-7">
         {WEEKDAYS.map((day, id) => <div className="border-r pt-3 h-fit uppercase text-center text-sm tracking-tighter" key={id} >{day}</div>)}
       </div>
@@ -38,10 +66,11 @@ export default function Month({month, year, savedEvents, occupiedSpaces}: MonthP
             day={day}
             month={lastMonthYear.month}
             year={lastMonthYear.year}
-            events={lastMonthYearEvents.filter((e) => e.day.toDateString() === new Date(lastMonthYear.year, lastMonthYear.month-1, day).toDateString())}
+            saveEvents={lastMonthYearEvents}
             numberOfUndisplayedEvents={
               (occupiedSpaces[lastMonthYear.year]?.[lastMonthYear.month]?.[id] ?? []).reduce((acc, val, idx, _) => idx > EVENTS_DISPLAYED_PER_ROW - 1 ? acc + val : acc, 0)
             }
+            dayToDayIdMapping={lastMonthDayToDayIdMapping}
             />)}
         {Array.from({length: _numberOfDaysInMonth}, (val, id) => id+1).map(
           (day, id) =>
@@ -52,10 +81,11 @@ export default function Month({month, year, savedEvents, occupiedSpaces}: MonthP
           day={day}
           month={month}
           year={year}
-          events={thisMonthYearEvents.filter((e) => e.day.toDateString() === new Date(year, month-1, day).toDateString())}
+          saveEvents={thisMonthYearEvents}
           numberOfUndisplayedEvents={
             (occupiedSpaces[year]?.[month]?.[id] ?? []).reduce((acc, val, idx, _) => idx > EVENTS_DISPLAYED_PER_ROW - 1 ? acc + val : acc, 0)
           }
+          dayToDayIdMapping={thisMonthDayToDayIdMapping}
           />
           )}
         {Array.from({length: numberOfNextMonthDays}, (val, id) => id+1).map((day, id) => 
@@ -65,10 +95,11 @@ export default function Month({month, year, savedEvents, occupiedSpaces}: MonthP
           day={day}
           month={nextMonthYear.month}
           year={nextMonthYear.year}
-          events={nextMonthYearEvents.filter((e) => e.day.toDateString() === new Date(nextMonthYear.year, nextMonthYear.month-1, day).toDateString())}
+          saveEvents={nextMonthYearEvents}
           numberOfUndisplayedEvents={
             (occupiedSpaces[nextMonthYear.year]?.[nextMonthYear.month]?.[id] ?? []).reduce((acc, val, idx, _) => idx > EVENTS_DISPLAYED_PER_ROW - 1 ? acc + val : acc, 0)
           }
+          dayToDayIdMapping={nextMonthDayToDayIdMapping}
           />)}
       </div>
     </div>

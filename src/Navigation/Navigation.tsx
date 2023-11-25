@@ -15,8 +15,8 @@ export default function Navigation({month, year, setMonthYear}: NavigationProps)
           </div>
           <div className="flex flex-row h-12 py-1 items-center">
             <button className="px-[14px] box-border h-full border rounded mr-6">Today</button>
-            <ChevronLeftIcon style={{ fontSize: 28 }} className="mr-2" onClick={() => setMonthYear({month: month-1, year})} />
-            <ChevronRightIcon style={{ fontSize: 28 }} onClick={() => setMonthYear({month: month+1, year})} />
+            <ChevronLeftIcon className="cursor-pointer mr-2" id="prev-month-button" style={{ fontSize: 28 }} onClick={() => setMonthYear({month: month-1, year})} />
+            <ChevronRightIcon className="cursor-pointer" id="next-month-button" style={{ fontSize: 28 }} onClick={() => setMonthYear({month: month+1, year})} />
             <div className="ml-4 flex-grow text-2xl font-bold">
               {getLongMonthName(month)} {year}
             </div>
